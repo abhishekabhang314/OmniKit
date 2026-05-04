@@ -1,0 +1,11 @@
+# CODEOWNERS
+# These people are automatically requested for review on PRs.
+
+# Global fallback — all files
+* @abhishekabhang314
+
+# Registry file — always needs a maintainer review
+frontend/src/registry/tools.json @abhishekabhang314
+
+# CI/CD and GitHub config
+.github/ @abhishekabhang314

@@ -1,0 +1,98 @@
+[
+  {
+    "id": "qr-code-generator",
+    "name": "QR Code Generator",
+    "description": "Generate a QR code from any URL or text instantly.",
+    "category": "generators",
+    "icon": "⚡",
+    "route": "/generators/qr-code",
+    "api": "/api/generators/qr-code",
+    "tags": ["qr", "barcode", "generator", "url"],
+    "featured": true,
+    "new": true
+  },
+  {
+    "id": "password-generator",
+    "name": "Password Generator",
+    "description": "Generate strong, random passwords with custom rules.",
+    "category": "generators",
+    "icon": "🔐",
+    "route": "/generators/password",
+    "api": "/api/generators/password",
+    "tags": ["password", "security", "random", "generator"],
+    "featured": true,
+    "new": true
+  },
+  {
+    "id": "uuid-generator",
+    "name": "UUID Generator",
+    "description": "Generate UUIDs (v4) for use in databases and APIs.",
+    "category": "generators",
+    "icon": "🆔",
+    "route": "/generators/uuid",
+    "api": "/api/generators/uuid",
+    "tags": ["uuid", "guid", "id", "generator"],
+    "featured": false,
+    "new": true
+  },
+  {
+    "id": "unit-converter",
+    "name": "Unit Converter",
+    "description": "Convert between length, weight, temperature, and speed units.",
+    "category": "converters",
+    "icon": "🔄",
+    "route": "/converters/unit",
+    "api": "/api/converters/unit",
+    "tags": ["unit", "convert", "length", "weight", "temperature"],
+    "featured": true,
+    "new": true
+  },
+  {
+    "id": "color-converter",
+    "name": "Color Converter",
+    "description": "Convert colors between HEX, RGB, and HSL formats.",
+    "category": "converters",
+    "icon": "🎨",
+    "route": "/converters/color",
+    "api": "/api/converters/color",
+    "tags": ["color", "hex", "rgb", "hsl", "css"],
+    "featured": false,
+    "new": true
+  },
+  {
+    "id": "emi-calculator",
+    "name": "EMI Calculator",
+    "description": "Calculate loan EMI, total interest, and repayment schedule.",
+    "category": "calculators",
+    "icon": "🧮",
+    "route": "/calculators/emi",
+    "api": "/api/calculators/emi",
+    "tags": ["emi", "loan", "interest", "finance", "calculator"],
+    "featured": true,
+    "new": true
+  },
+  {
+    "id": "bmi-calculator",
+    "name": "BMI Calculator",
+    "description": "Calculate your Body Mass Index and health category.",
+    "category": "calculators",
+    "icon": "⚖️",
+    "route": "/calculators/bmi",
+    "api": "/api/calculators/bmi",
+    "tags": ["bmi", "health", "weight", "calculator"],
+    "featured": false,
+    "new": true
+  },
+  {
+    "id": "age-calculator",
+    "name": "Age Calculator",
+    "description": "Calculate exact age in years, months, and days from a birth date.",
+    "category": "calculators",
+    "icon": "📅",
+    "route": "/calculators/age",
+    "api": "/api/calculators/age",
+    "tags": ["age", "date", "birthday", "calculator"],
+    "featured": false,
+    "new": true
+  }
+]
