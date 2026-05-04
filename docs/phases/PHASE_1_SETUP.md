@@ -6,14 +6,14 @@
 
 ## Checklist
 
-- [ ] Prerequisites installed
-- [ ] Project folder created and structured
-- [ ] Git initialized with correct branches
-- [ ] GitHub repository created and configured
+- [x] Prerequisites installed
+- [x] Project folder created and structured
+- [x] Git initialized with correct branches
+- [x] GitHub repository created and configured
 - [ ] Branch protection rules set
-- [ ] Labels created
-- [ ] CI workflow verified
-- [ ] Team members invited (if applicable)
+- [x] Labels created
+- [x] CI workflow verified
+- [x] Team members invited (if applicable)
 
 ---
 
