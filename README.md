@@ -81,7 +81,7 @@ toolbox/
 
 | Phase | Name | Status |
 |---|---|---|
-| [Phase 1](docs/phases/PHASE_1_SETUP.md) | Project Setup & Repository | ✅ Current |
+| [Phase 1](docs/phases/PHASE_1_SETUP.md) | Project Setup & Repository | ⏳ Working |
 | [Phase 2](docs/phases/PHASE_2_BACKEND.md) | FastAPI Backend Foundation | ⏳ Next |
 | [Phase 3](docs/phases/PHASE_3_FRONTEND.md) | Vite + React Frontend Foundation | ⏳ Upcoming |
 | [Phase 4](docs/phases/PHASE_4_FIRST_TOOLS.md) | First 3 Tools (End-to-End) | ⏳ Upcoming |
