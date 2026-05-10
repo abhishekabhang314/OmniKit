@@ -16,7 +16,6 @@ build/
 *.log
 
 # Environment variables
-backend/.env
 .env
 .env.local
 .env.*.local
