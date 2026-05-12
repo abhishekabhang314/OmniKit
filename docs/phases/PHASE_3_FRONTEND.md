@@ -6,15 +6,15 @@
 
 ## Checklist
 
-- [ ] Vite + React project scaffolded
-- [ ] Tailwind CSS configured
-- [ ] React Router v6 installed and configured
-- [ ] App shell (layout, header, footer) built
-- [ ] Homepage route renders
-- [ ] Category page route renders (auto-generated from `tools.json`)
-- [ ] 404 page created
-- [ ] Frontend connects to backend (`/health` ping works)
-- [ ] `npm run build` succeeds
+- [x] Vite + React project scaffolded
+- [x] Tailwind CSS configured
+- [x] React Router v6 installed and configured
+- [x] App shell (layout, header, footer) built
+- [x] Homepage route renders
+- [x] Category page route renders (auto-generated from `tools.json`)
+- [x] 404 page created
+- [x] Frontend connects to backend (`/health` ping works)
+- [x] `npm run build` succeeds
 
 ---
 
