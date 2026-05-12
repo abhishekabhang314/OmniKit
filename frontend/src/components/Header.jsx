@@ -8,11 +8,11 @@ export default function Header() {
           🧰 ToolBox
         </Link>
         <nav className="flex gap-4 text-sm text-gray-600">
-          <a href="https://github.com/YOUR_USERNAME/toolbox" target="_blank" rel="noreferrer"
+          <a href="https://github.com/abhishekabhang314/toolbox" target="_blank" rel="noreferrer"
              className="hover:text-brand-600 transition-colors">
             GitHub
           </a>
-          <a href="https://github.com/YOUR_USERNAME/toolbox/blob/main/CONTRIBUTING.md"
+          <a href="https://github.com/abhishekabhang314/toolbox/blob/main/CONTRIBUTING.md"
              target="_blank" rel="noreferrer"
              className="hover:text-brand-600 transition-colors">
             Contribute

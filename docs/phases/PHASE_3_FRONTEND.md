@@ -199,11 +199,11 @@ export default function Header() {
           🧰 ToolBox
         </Link>
         <nav className="flex gap-4 text-sm text-gray-600">
-          <a href="https://github.com/YOUR_USERNAME/toolbox" target="_blank" rel="noreferrer"
+          <a href="https://github.com/abhishekabhang314/toolbox" target="_blank" rel="noreferrer"
              className="hover:text-brand-600 transition-colors">
             GitHub
           </a>
-          <a href="https://github.com/YOUR_USERNAME/toolbox/blob/main/CONTRIBUTING.md"
+          <a href="https://github.com/abhishekabhang314/toolbox/blob/main/CONTRIBUTING.md"
              target="_blank" rel="noreferrer"
              className="hover:text-brand-600 transition-colors">
             Contribute
@@ -222,7 +222,7 @@ export default function Footer() {
   return (
     <footer className="bg-white border-t border-gray-200 text-center text-sm text-gray-500 py-4">
       ToolBox — open source, community built.{' '}
-      <a href="https://github.com/YOUR_USERNAME/toolbox"
+      <a href="https://github.com/abhishekabhang314/toolbox"
          className="text-brand-600 hover:underline" target="_blank" rel="noreferrer">
         Contribute on GitHub
       </a>
@@ -386,7 +386,7 @@ export default function CategoryPage() {
       {categoryTools.length === 0 ? (
         <div className="text-center py-20 text-gray-400">
           No tools in this category yet.{' '}
-          <a href="https://github.com/YOUR_USERNAME/toolbox/blob/main/CONTRIBUTING.md"
+          <a href="https://github.com/abhishekabhang314/toolbox/blob/main/CONTRIBUTING.md"
              className="text-brand-600 hover:underline">Contribute one!</a>
         </div>
       ) : (

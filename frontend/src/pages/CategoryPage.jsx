@@ -31,7 +31,7 @@ export default function CategoryPage() {
       {categoryTools.length === 0 ? (
         <div className="text-center py-20 text-gray-400">
           No tools in this category yet.{' '}
-          <a href="https://github.com/YOUR_USERNAME/toolbox/blob/main/CONTRIBUTING.md"
+          <a href="https://github.com/abhishekabhang314/toolbox/blob/main/CONTRIBUTING.md"
              className="text-brand-600 hover:underline">Contribute one!</a>
         </div>
       ) : (
