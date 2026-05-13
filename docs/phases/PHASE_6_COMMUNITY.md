@@ -26,7 +26,7 @@ Create starter categories:
 - 🎉 **Show & Tell** — share tools you built
 - 📣 **Announcements** — project updates (maintainer-only)
 
-Pin a welcome post in Announcements explaining what ToolBox is and how to contribute.
+Pin a welcome post in Announcements explaining what OmniKit is and how to contribute.
 
 ---
 
@@ -65,9 +65,9 @@ Draft posts for:
 ### GitHub README Badge Block
 
 ```markdown
-[![Contributors](https://img.shields.io/github/contributors/abhishekabhang314/toolbox)](https://github.com/abhishekabhang314/toolbox/graphs/contributors)
-[![Open Issues](https://img.shields.io/github/issues/abhishekabhang314/toolbox)](https://github.com/abhishekabhang314/toolbox/issues)
-[![Stars](https://img.shields.io/github/stars/abhishekabhang314/toolbox)](https://github.com/abhishekabhang314/toolbox/stargazers)
+[![Contributors](https://img.shields.io/github/contributors/abhishekabhang314/OmniKit)](https://github.com/abhishekabhang314/OmniKit/graphs/contributors)
+[![Open Issues](https://img.shields.io/github/issues/abhishekabhang314/OmniKit)](https://github.com/abhishekabhang314/OmniKit/issues)
+[![Stars](https://img.shields.io/github/stars/abhishekabhang314/OmniKit)](https://github.com/abhishekabhang314/OmniKit/stargazers)
 ```
 
 ### Places to Share
@@ -85,7 +85,7 @@ Create `CHANGELOG.md`:
 ```markdown
 # Changelog
 
-All notable changes to ToolBox are documented here.
+All notable changes to OmniKit are documented here.
 Format: [Semantic Versioning](https://semver.org/)
 
 ## [Unreleased]

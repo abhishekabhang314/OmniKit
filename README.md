@@ -1,4 +1,4 @@
-# 🧰 ToolBox
+# 🧰 OmniKit
 
 > A community-built collection of everyday utility tools — QR generators, converters, calculators, and more. Free, fast, and open source.
 
@@ -24,7 +24,7 @@
 
 ## About
 
-**ToolBox** is an open-source, community-driven platform for everyday utility tools. Instead of Googling a different website for every small task, ToolBox brings them all together in one clean, fast interface.
+**OmniKit** is an open-source, community-driven platform for everyday utility tools. Instead of Googling a different website for every small task, OmniKit brings them all together in one clean, fast interface.
 
 Every tool runs on a **FastAPI Python backend** (all logic lives in Python) with a **Vite + React frontend**. Tools are registered in a central `tools.json` manifest — adding a new tool is just a Python file, a React component, and a JSON entry.
 
@@ -33,7 +33,7 @@ Every tool runs on a **FastAPI Python backend** (all logic lives in Python) with
 ## Project Structure
 
 ```
-toolbox/
+OmniKit/
 ├── backend/                  # FastAPI Python backend
 │   ├── main.py               # App entry point
 │   ├── routers/              # One router per tool category
@@ -98,8 +98,8 @@ toolbox/
 - Git
 
 ```cmd
-git clone https://github.com/abhishekabhang314/toolbox.git
-cd toolbox
+git clone https://github.com/abhishekabhang314/OmniKit.git
+cd OmniKit
 
 :: Backend
 cd backend
@@ -130,4 +130,4 @@ Read the [Contributing Guide](CONTRIBUTING.md) before opening a PR.
 
 ## License
 
-MIT © ToolBox Contributors.
+MIT © OmniKit Contributors.

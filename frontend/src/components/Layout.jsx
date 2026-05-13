@@ -8,7 +8,7 @@ export default function Layout() {
   const location = useLocation()
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Header />
       <main style={{
         flex: 1,
@@ -34,6 +34,6 @@ export default function Layout() {
         </AnimatePresence>
       </main>
       <Footer />
-    </>
+    </div>
   )
 }

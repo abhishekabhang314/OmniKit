@@ -67,7 +67,7 @@ If starting fresh from this scaffold:
 cd C:\Projects
 
 :: If you already have the files, just init git:
-cd toolbox
+cd OmniKit
 git init
 git add .
 git commit -m "chore: initial project scaffold"
@@ -79,7 +79,7 @@ git commit -m "chore: initial project scaffold"
 
 1. Go to https://github.com/new
 2. Set the following:
-   - **Repository name:** `toolbox`
+   - **Repository name:** `OmniKit`
    - **Description:** `A community-built collection of everyday utility tools`
    - **Visibility:** Public
    - **Do NOT** initialize with README, .gitignore, or license (we have them already)
@@ -88,7 +88,7 @@ git commit -m "chore: initial project scaffold"
 ### Push your local code
 
 ```cmd
-git remote add origin https://github.com/abhishekabhang314/toolbox.git
+git remote add origin https://github.com/abhishekabhang314/OmniKit.git
 git branch -M main
 git push -u origin main
 ```
@@ -196,7 +196,7 @@ If you want a project website later, enable it:
 After Phase 1, your repo should look like this:
 
 ```
-toolbox/
+OmniKit/
 ├── backend/
 │   ├── main.py
 │   ├── requirements.txt

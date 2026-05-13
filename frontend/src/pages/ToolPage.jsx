@@ -73,7 +73,7 @@ export default function ToolPage() {
           title="Coming soon"
           description="This tool is being built. Want to contribute and ship it?"
           action={{
-            href: 'https://github.com/abhishekabhang314/toolbox/blob/main/CONTRIBUTING.md',
+            href: 'https://github.com/abhishekabhang314/OmniKit/blob/main/CONTRIBUTING.md',
             label: 'Want to build it? Contribute →',
           }}
         />

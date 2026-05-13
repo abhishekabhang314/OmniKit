@@ -30,7 +30,7 @@ export default function Header() {
           {/* Logo */}
           <Link to="/" className="header-logo">
             <span className="header-logo-icon">
-              <Wrench size={20} />
+              <img src="/OmniKit-Logo.png" alt="OmniKit Logo" height={25} width={25} />
             </span>
             OmniKit
           </Link>
@@ -40,7 +40,7 @@ export default function Header() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <a
-                  href="https://github.com/abhishekabhang314/toolbox/blob/main/CONTRIBUTING.md"
+                  href="https://github.com/abhishekabhang314/OmniKit/blob/main/CONTRIBUTING.md"
                   target="_blank"
                   rel="noreferrer"
                   className="btn-ghost"

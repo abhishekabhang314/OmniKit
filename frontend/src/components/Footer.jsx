@@ -7,7 +7,7 @@ export default function Footer() {
       <footer className="footer">
         OmniKit — open source, community built.{' '}
         <a
-          href="https://github.com/abhishekabhang314/toolbox"
+          href="https://github.com/abhishekabhang314/OmniKit"
           target="_blank"
           rel="noreferrer"
         >

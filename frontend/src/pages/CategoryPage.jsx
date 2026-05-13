@@ -58,7 +58,7 @@ export default function CategoryPage() {
           title="No tools yet"
           description="This category is empty for now. Want to contribute the first tool?"
           action={{
-            href: 'https://github.com/abhishekabhang314/toolbox/blob/main/CONTRIBUTING.md',
+            href: 'https://github.com/abhishekabhang314/OmniKit/blob/main/CONTRIBUTING.md',
             label: 'Contribute a tool →',
           }}
         />

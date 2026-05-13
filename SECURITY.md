@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Only the latest version of ToolBox is actively maintained and receives security updates.
+Only the latest version of OmniKit is actively maintained and receives security updates.
 
 | Version | Supported |
 |---|---|

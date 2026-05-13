@@ -196,14 +196,14 @@ export default function Header() {
     <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link to="/" className="text-xl font-bold text-brand-600">
-          🧰 ToolBox
+          🧰 OmniKit
         </Link>
         <nav className="flex gap-4 text-sm text-gray-600">
-          <a href="https://github.com/abhishekabhang314/toolbox" target="_blank" rel="noreferrer"
+          <a href="https://github.com/abhishekabhang314/OmniKit" target="_blank" rel="noreferrer"
              className="hover:text-brand-600 transition-colors">
             GitHub
           </a>
-          <a href="https://github.com/abhishekabhang314/toolbox/blob/main/CONTRIBUTING.md"
+          <a href="https://github.com/abhishekabhang314/OmniKit/blob/main/CONTRIBUTING.md"
              target="_blank" rel="noreferrer"
              className="hover:text-brand-600 transition-colors">
             Contribute
@@ -221,8 +221,8 @@ export default function Header() {
 export default function Footer() {
   return (
     <footer className="bg-white border-t border-gray-200 text-center text-sm text-gray-500 py-4">
-      ToolBox — open source, community built.{' '}
-      <a href="https://github.com/abhishekabhang314/toolbox"
+      OmniKit — open source, community built.{' '}
+      <a href="https://github.com/abhishekabhang314/OmniKit"
          className="text-brand-600 hover:underline" target="_blank" rel="noreferrer">
         Contribute on GitHub
       </a>
@@ -289,7 +289,7 @@ export default function HomePage() {
     <div>
       {/* Hero */}
       <div className="text-center py-12">
-        <h1 className="text-4xl font-bold text-gray-900">🧰 ToolBox</h1>
+        <h1 className="text-4xl font-bold text-gray-900">🧰 OmniKit</h1>
         <p className="text-gray-500 mt-2 text-lg">All your everyday tools, in one place.</p>
         <input
           type="text"
@@ -386,7 +386,7 @@ export default function CategoryPage() {
       {categoryTools.length === 0 ? (
         <div className="text-center py-20 text-gray-400">
           No tools in this category yet.{' '}
-          <a href="https://github.com/abhishekabhang314/toolbox/blob/main/CONTRIBUTING.md"
+          <a href="https://github.com/abhishekabhang314/OmniKit/blob/main/CONTRIBUTING.md"
              className="text-brand-600 hover:underline">Contribute one!</a>
         </div>
       ) : (
@@ -443,7 +443,7 @@ export default function NotFoundPage() {
       <h1 className="text-2xl font-bold text-gray-800">Page not found</h1>
       <p className="text-gray-500 mt-2">This tool or page doesn't exist.</p>
       <Link to="/" className="mt-6 inline-block bg-brand-600 text-white px-6 py-2 rounded-lg hover:bg-brand-700">
-        Back to ToolBox
+        Back to OmniKit
       </Link>
     </div>
   )
