@@ -8,7 +8,6 @@ export default function Layout() {
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      backgroundColor: 'var(--color-bg)',
     }}>
       <Header />
       <main style={{

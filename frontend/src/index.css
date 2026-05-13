@@ -10,6 +10,8 @@ html { font-size: 16px; scroll-behavior: smooth; }
 body {
   font-family: var(--font-sans);
   background-color: var(--color-bg);
+  background-image: radial-gradient(ellipse at 65% 0%, color-mix(in srgb, var(--color-primary) 10%, var(--color-bg)) 0%, var(--color-bg) 55%);
+  background-attachment: fixed;
   color: var(--color-text-primary);
   margin: 0;
   padding: 0;
