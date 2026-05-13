@@ -1,9 +1,11 @@
 """QR Code Generator — uses the `qrcode` library with Pillow."""
 
-import qrcode
 import base64
 from io import BytesIO
-from pydantic import BaseModel, HttpUrl, field_validator
+
+import qrcode
+from pydantic import BaseModel, field_validator
+
 
 class QRRequest(BaseModel):
     content: str

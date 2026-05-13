@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+
 from tools.emi_calculator import EMIRequest, EMIResponse, calculate_emi
 
 router = APIRouter()

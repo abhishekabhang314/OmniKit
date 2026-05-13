@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+
 from tools.qr_code import QRRequest, QRResponse, generate_qr
 
 router = APIRouter()

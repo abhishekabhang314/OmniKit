@@ -1,7 +1,9 @@
 """EMI Calculator — pure Python math, no external library needed."""
 
-from pydantic import BaseModel, field_validator
 from typing import List
+
+from pydantic import BaseModel, field_validator
+
 
 class EMIRequest(BaseModel):
     principal: float        # Loan amount
