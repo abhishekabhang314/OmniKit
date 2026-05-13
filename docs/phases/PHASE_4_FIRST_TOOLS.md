@@ -11,12 +11,12 @@
 
 ## Checklist
 
-- [ ] QR Code Generator — Python logic + API + React UI
-- [ ] Unit Converter — Python logic + API + React UI
-- [ ] EMI Calculator — Python logic + API + React UI
-- [ ] All 3 tools have tests
-- [ ] All 3 tools accessible via the frontend
-- [ ] `tools.json` entries verified
+- [x] QR Code Generator — Python logic + API + React UI
+- [x] Unit Converter — Python logic + API + React UI
+- [x] EMI Calculator — Python logic + API + React UI
+- [x] All 3 tools have tests
+- [x] All 3 tools accessible via the frontend
+- [x] `tools.json` entries verified
 
 ---
 
