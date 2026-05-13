@@ -11,6 +11,8 @@ class QRRequest(BaseModel):
     content: str
     size: int = 10          # box_size
     border: int = 4         # quiet zone boxes
+    theme: str = "dark"     # "dark" or "light"
+    transparent: bool = False
 
     @field_validator('content')
     @classmethod
@@ -33,7 +35,21 @@ def generate_qr(request: QRRequest) -> QRResponse:
     qr.add_data(request.content)
     qr.make(fit=True)
 
-    img = qr.make_image(fill_color="black", back_color="white")
+    fill_color = "black" if request.theme == "dark" else "white"
+    back_color = "white" if request.theme == "dark" else "black"
+
+    img = qr.make_image(fill_color=fill_color, back_color=back_color).convert("RGBA")
+
+    if request.transparent:
+        datas = img.getdata()
+        new_data = []
+        bg_rgb = (255, 255, 255) if request.theme == "dark" else (0, 0, 0)
+        for item in datas:
+            if item[:3] == bg_rgb:
+                new_data.append((255, 255, 255, 0))
+            else:
+                new_data.append(item)
+        img.putdata(new_data)
     buffer = BytesIO()
     img.save(buffer, format="PNG")
     encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
