@@ -1,84 +1,118 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import tools from '../registry/tools.json'
-import ToolCard from '../components/ToolCard'
+import { Star, LayoutGrid, Wrench } from 'lucide-react'
+import { Skeleton } from '@/components/ui/skeleton'
+import { GradientBackground } from '@/components/animate-ui/backgrounds/GradientBackground'
+import tools from '@/registry/tools.json'
+import ToolCard from '@/components/ToolCard'
+import CategoryCard from '@/components/CategoryCard'
+import SearchBar from '@/components/SearchBar'
 
 const CATEGORIES = [
-  { slug: 'generators', label: 'Generators', icon: '⚡' },
-  { slug: 'converters', label: 'Converters', icon: '🔄' },
-  { slug: 'calculators', label: 'Calculators', icon: '🧮' },
-  { slug: 'text', label: 'Text Tools', icon: '📝' },
-  { slug: 'dev', label: 'Dev Tools', icon: '💻' },
-  { slug: 'image', label: 'Image Tools', icon: '🖼️' },
+  { slug: 'generators',  label: 'Generators' },
+  { slug: 'converters',  label: 'Converters' },
+  { slug: 'calculators', label: 'Calculators' },
+  { slug: 'text',        label: 'Text Tools' },
+  { slug: 'dev',         label: 'Dev Tools' },
+  { slug: 'image',       label: 'Image Tools' },
 ]
 
 export default function HomePage() {
   const [search, setSearch] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
+
+  // simulate brief search loading state for demo purposes of Skeleton
+  const handleSearch = (v) => {
+    setSearch(v)
+    if (v) {
+      setIsSearching(true)
+      setTimeout(() => setIsSearching(false), 300)
+    }
+  }
 
   const filtered = tools.filter(t =>
     [t.name, t.description, ...t.tags].some(s =>
       s.toLowerCase().includes(search.toLowerCase())
     )
   )
-
   const featured = tools.filter(t => t.featured)
 
   return (
     <div>
       {/* Hero */}
-      <div className="text-center py-12">
-        <h1 className="text-4xl font-bold text-gray-900">🧰 ToolBox</h1>
-        <p className="text-gray-500 mt-2 text-lg">All your everyday tools, in one place.</p>
-        <input
-          type="text"
-          placeholder="Search tools..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="mt-6 w-full max-w-md mx-auto block border border-gray-300 rounded-xl px-4 py-3
-                     focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm"
-        />
+      <div className="relative text-center py-16 px-6 mb-10 -mx-6 -mt-8 overflow-hidden rounded-b-3xl">
+        <div className="relative z-10 max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[var(--color-primary-light)] text-[var(--color-primary)] rounded-full text-xs font-semibold tracking-wider uppercase mb-6">
+            <Wrench size={12} />
+            Community Built
+          </div>
+          <h1 className="font-sans text-[clamp(32px,5vw,48px)] font-bold text-[var(--color-text-primary)] tracking-tight leading-[1.15] mb-4">
+            All your everyday tools,<br />
+            <span className="text-[var(--color-primary)]">in one place.</span>
+          </h1>
+          <p className="font-sans text-base text-[var(--color-text-muted)] leading-relaxed mx-auto mb-8 max-w-[480px]">
+            Free, fast, open-source utility tools — no sign-up, no ads.
+          </p>
+          <div className="max-w-[520px] mx-auto">
+            <SearchBar value={search} onChange={handleSearch} />
+          </div>
+        </div>
       </div>
 
       {/* Search results */}
       {search && (
         <section className="mb-10">
-          <h2 className="text-lg font-semibold mb-4 text-gray-700">
-            Results for "{search}" ({filtered.length})
+          <h2 className="section-title">
+            Results for "{search}"
+            <span className="text-[13px] font-medium text-[var(--color-text-muted)] ml-1">
+              ({filtered.length})
+            </span>
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filtered.map(t => <ToolCard key={t.id} tool={t} />)}
-          </div>
+          {isSearching ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {[...Array(4)].map((_, i) => (
+                <Skeleton key={i} className="h-32 w-full rounded-xl" />
+              ))}
+            </div>
+          ) : filtered.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {filtered.map(t => <ToolCard key={t.id} tool={t} />)}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-[var(--color-text-muted)] font-sans text-sm">
+              No tools found for "{search}"
+            </div>
+          )}
         </section>
       )}
 
       {!search && (
         <>
-          {/* Featured */}
+          {/* Featured Tools */}
           <section className="mb-10">
-            <h2 className="text-lg font-semibold mb-4 text-gray-700">⭐ Featured Tools</h2>
+            <h2 className="section-title">
+              <Star size={18} className="section-icon" />
+              Featured Tools
+            </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {featured.map(t => <ToolCard key={t.id} tool={t} />)}
             </div>
           </section>
 
-          {/* Categories */}
+          {/* Browse by Category */}
           <section>
-            <h2 className="text-lg font-semibold mb-4 text-gray-700">📂 Browse by Category</h2>
+            <h2 className="section-title">
+              <LayoutGrid size={18} className="section-icon" />
+              Browse by Category
+            </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {CATEGORIES.map(cat => {
-                const count = tools.filter(t => t.category === cat.slug).length
-                return (
-                  <Link key={cat.slug} to={`/${cat.slug}`}
-                    className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md
-                               hover:border-brand-500 transition-all flex items-center gap-3">
-                    <span className="text-2xl">{cat.icon}</span>
-                    <div>
-                      <div className="font-semibold text-gray-800">{cat.label}</div>
-                      <div className="text-xs text-gray-400">{count} tool{count !== 1 ? 's' : ''}</div>
-                    </div>
-                  </Link>
-                )
-              })}
+              {CATEGORIES.map(cat => (
+                <CategoryCard
+                  key={cat.slug}
+                  slug={cat.slug}
+                  label={cat.label}
+                  count={tools.filter(t => t.category === cat.slug).length}
+                />
+              ))}
             </div>
           </section>
         </>

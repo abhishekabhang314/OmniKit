@@ -82,13 +82,13 @@ load_dotenv()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("ToolBox API starting up...")
+    print("OmniKit API starting up...")
     yield
-    print("ToolBox API shutting down...")
+    print("OmniKit API shutting down...")
 
 app = FastAPI(
-    title="ToolBox API",
-    description="Backend API for ToolBox — community utility tools",
+    title="OmniKit API",
+    description="Backend API for OmniKit — community utility tools",
     version=os.getenv("APP_VERSION", "0.1.0"),
     lifespan=lifespan,
 )
@@ -113,7 +113,7 @@ app.include_router(calculators.router, prefix="/api/calculators", tags=["Calcula
 async def root():
     return {
         "status": "ok",
-        "message": "ToolBox API is running",
+        "message": "OmniKit API is running",
         "docs": "/docs",
     }
 

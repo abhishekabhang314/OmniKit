@@ -1,1 +1,52 @@
 @import "tailwindcss";
+@import "./theme.css";
+@import "./styles/components.css";
+
+/* ── Tailwind v4 @theme inline — maps OmniKit tokens to TW utilities ── */
+/* This lets shadcn components use bg-background, text-foreground, etc. */
+@theme inline {
+  --color-background:          var(--color-bg);
+  --color-foreground:          var(--color-text-primary);
+  --color-card:                var(--color-surface);
+  --color-card-foreground:     var(--color-text-primary);
+  --color-popover:             var(--color-surface);
+  --color-popover-foreground:  var(--color-text-primary);
+  --color-primary:             var(--color-primary);
+  --color-primary-foreground:  #ffffff;
+  --color-secondary:           var(--color-surface-raised);
+  --color-secondary-foreground:var(--color-text-secondary);
+  --color-muted:               var(--color-primary-light);
+  --color-muted-foreground:    var(--color-text-muted);
+  --color-accent:              var(--color-surface-raised);
+  --color-accent-foreground:   var(--color-text-primary);
+  --color-destructive:         var(--color-error);
+  --color-destructive-foreground: #ffffff;
+  --color-border:              var(--color-border);
+  --color-input:               var(--color-border);
+  --color-ring:                var(--color-primary);
+  --radius-md:                 var(--radius-md);
+}
+
+/* ── Global Base ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  background-image: var(--gradient-bg);
+  background-attachment: fixed;
+  color: var(--color-text-primary);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+a { color: inherit; }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }

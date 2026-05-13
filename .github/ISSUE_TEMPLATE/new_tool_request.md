@@ -1,6 +1,6 @@
 ---
 name: New Tool Request
-about: Suggest a new tool to add to ToolBox
+about: Suggest a new tool to add to OmniKit
 title: "[TOOL REQUEST] "
 labels: new-tool
 assignees: ''
