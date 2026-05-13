@@ -4,9 +4,20 @@ import Footer from './Footer'
 
 export default function Layout() {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      backgroundColor: 'var(--color-bg)',
+    }}>
       <Header />
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-8">
+      <main style={{
+        flex: 1,
+        maxWidth: 1280,
+        margin: '0 auto',
+        width: '100%',
+        padding: 'var(--space-8) var(--space-6)',
+      }}>
         <Outlet />
       </main>
       <Footer />

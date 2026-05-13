@@ -1,23 +1,49 @@
 import { Link } from 'react-router-dom'
+import { Wrench, GitBranch, Sun, Moon } from 'lucide-react'
+import { useThemeContext } from '../context/ThemeContext'
 
 export default function Header() {
+  const { theme, toggleTheme } = useThemeContext()
+
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="text-xl font-bold text-brand-600">
-          🧰 ToolBox
+    <header className="header">
+      <div className="header-inner">
+        {/* Logo */}
+        <Link to="/" className="header-logo">
+          <span className="header-logo-icon">
+            <Wrench size={20} />
+          </span>
+          ToolBox
         </Link>
-        <nav className="flex gap-4 text-sm text-gray-600">
-          <a href="https://github.com/abhishekabhang314/toolbox" target="_blank" rel="noreferrer"
-             className="hover:text-brand-600 transition-colors">
-            GitHub
-          </a>
-          <a href="https://github.com/abhishekabhang314/toolbox/blob/main/CONTRIBUTING.md"
-             target="_blank" rel="noreferrer"
-             className="hover:text-brand-600 transition-colors">
+
+        {/* Right side actions */}
+        <div className="header-actions">
+          <a
+            href="https://github.com/abhishekabhang314/toolbox/blob/main/CONTRIBUTING.md"
+            target="_blank"
+            rel="noreferrer"
+            className="btn-ghost"
+            style={{ fontSize: 13 }}
+          >
             Contribute
           </a>
-        </nav>
+          <a
+            href="https://github.com/abhishekabhang314/toolbox"
+            target="_blank"
+            rel="noreferrer"
+            className="btn-icon"
+            aria-label="View on GitHub"
+          >
+            <GitBranch size={18} />
+          </a>
+          <button
+            className="btn-icon"
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+        </div>
       </div>
     </header>
   )

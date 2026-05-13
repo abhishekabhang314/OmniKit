@@ -1,17 +1,53 @@
 import { Link } from 'react-router-dom'
+import { ToolIcon } from './Icon'
 
 export default function ToolCard({ tool }) {
   return (
-    <Link to={tool.route}
-      className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-brand-500 transition-all group">
-      <div className="text-2xl mb-2">{tool.icon}</div>
-      <h3 className="font-semibold text-gray-800 group-hover:text-brand-600">{tool.name}</h3>
-      <p className="text-sm text-gray-500 mt-1">{tool.description}</p>
-      {tool.new && (
-        <span className="inline-block mt-2 text-xs bg-brand-50 text-brand-700 px-2 py-0.5 rounded-full">
-          New
-        </span>
-      )}
+    <Link to={tool.route} className="card-tool">
+      {/* Icon */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 4,
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: 40,
+          height: 40,
+          background: 'var(--color-primary-light)',
+          color: 'var(--color-primary)',
+          borderRadius: 'var(--radius-md)',
+        }}>
+          <ToolIcon id={tool.id} size={20} />
+        </div>
+        {tool.new && (
+          <span className="badge badge-new">New</span>
+        )}
+      </div>
+
+      {/* Name */}
+      <div style={{
+        fontFamily: 'var(--font-sans)',
+        fontWeight: 600,
+        fontSize: 14,
+        color: 'var(--color-text-primary)',
+        lineHeight: 1.3,
+      }}>
+        {tool.name}
+      </div>
+
+      {/* Description */}
+      <div style={{
+        fontFamily: 'var(--font-sans)',
+        fontSize: 13,
+        color: 'var(--color-text-muted)',
+        lineHeight: 1.5,
+      }}>
+        {tool.description}
+      </div>
     </Link>
   )
 }

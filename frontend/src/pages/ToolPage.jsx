@@ -1,11 +1,31 @@
 import { useParams, Link } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
+import { Hammer } from 'lucide-react'
 import tools from '../registry/tools.json'
+import Breadcrumb from '../components/Breadcrumb'
+import EmptyState from '../components/EmptyState'
+import { ToolIcon } from '../components/Icon'
 
 const TOOL_COMPONENTS = {
   'qr-code-generator': lazy(() => import('../tools/QRCodeGenerator')),
   'unit-converter':    lazy(() => import('../tools/UnitConverter')),
   'emi-calculator':    lazy(() => import('../tools/EMICalculator')),
+}
+
+function LoadingFallback() {
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 'var(--space-12)',
+      color: 'var(--color-text-muted)',
+      fontFamily: 'var(--font-sans)',
+      fontSize: 14,
+      gap: 'var(--space-2)',
+    }}>
+      <span className="spinner" />
+      Loading tool...
+    </div>
+  )
 }
 
 export default function ToolPage() {
@@ -15,60 +35,53 @@ export default function ToolPage() {
 
   if (!tool) {
     return (
-      <div style={{ textAlign: 'center', padding: '80px 0', color: '#aaa' }}>
-        <div style={{ fontSize: 48 }}>🔧</div>
-        <p style={{ marginTop: 12 }}>Tool not found. Check the URL or go back.</p>
-        <Link to="/" style={{ color: '#4f46e5', marginTop: 12, display: 'inline-block' }}>
-          ← Back to ToolBox
-        </Link>
+      <div>
+        <div style={{ marginBottom: 'var(--space-5)' }}>
+          <Breadcrumb to="/" label="All tools" />
+        </div>
+        <EmptyState
+          title="Tool not found"
+          description="Check the URL or head back to browse all tools."
+          action={{ href: '/', label: 'Back to ToolBox' }}
+        />
       </div>
     )
   }
 
   return (
-    <div style={{ maxWidth: 680, margin: '0 auto' }}>
-      <div style={{ marginBottom: 20 }}>
-        <Link
-          to={`/${category}`}
-          style={{ fontSize: 13, color: '#aaa', textDecoration: 'none' }}
-        >
-          ← Back to {category}
-        </Link>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: '#1a1a1a', margin: '8px 0 4px' }}>
-          {tool.icon} {tool.name}
-        </h1>
-        <p style={{ fontSize: 14, color: '#888', margin: 0 }}>{tool.description}</p>
+    <div style={{ maxWidth: 720, margin: '0 auto' }}>
+      {/* Breadcrumb */}
+      <div style={{ marginBottom: 'var(--space-5)' }}>
+        <Breadcrumb to={`/${category}`} label={category} />
       </div>
 
-      <div style={{
-        background: '#fff',
-        borderRadius: 16,
-        border: '1.5px solid #e5e5e5',
-        padding: 28,
-      }}>
-        {ToolComponent ? (
-          <Suspense fallback={
-            <div style={{ textAlign: 'center', padding: '40px 0', color: '#aaa' }}>
-              Loading tool...
-            </div>
-          }>
-            <ToolComponent />
-          </Suspense>
-        ) : (
-          <div style={{ textAlign: 'center', padding: '40px 0', color: '#aaa' }}>
-            <div style={{ fontSize: 32, marginBottom: 8 }}>🛠️</div>
-            <p>This tool is coming soon.</p>
-            <a
-              href="https://github.com/abhishekabhang314/toolbox/blob/main/CONTRIBUTING.md"
-              target="_blank"
-              rel="noreferrer"
-              style={{ color: '#4f46e5', fontSize: 13 }}
-            >
-              Want to build it? Contribute →
-            </a>
+      {/* Tool header */}
+      <div className="tool-header">
+        <div className="tool-header-icon-row">
+          <div className="tool-header-icon">
+            <ToolIcon id={tool.id} size={22} />
           </div>
-        )}
+          <h1 className="tool-header-name">{tool.name}</h1>
+        </div>
+        <p className="tool-header-desc">{tool.description}</p>
       </div>
+
+      {/* Tool UI */}
+      {ToolComponent ? (
+        <Suspense fallback={<LoadingFallback />}>
+          <ToolComponent />
+        </Suspense>
+      ) : (
+        <EmptyState
+          icon={Hammer}
+          title="Coming soon"
+          description="This tool is being built. Want to contribute and ship it?"
+          action={{
+            href: 'https://github.com/abhishekabhang314/toolbox/blob/main/CONTRIBUTING.md',
+            label: 'Want to build it? Contribute →',
+          }}
+        />
+      )}
     </div>
   )
 }
