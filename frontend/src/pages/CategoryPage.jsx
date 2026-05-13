@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom'
 import { Package } from 'lucide-react'
-import tools from '../registry/tools.json'
-import ToolCard from '../components/ToolCard'
-import Breadcrumb from '../components/Breadcrumb'
-import EmptyState from '../components/EmptyState'
-import { CategoryIcon } from '../components/Icon'
+import tools from '@/registry/tools.json'
+import ToolCard from '@/components/ToolCard'
+import Breadcrumb from '@/components/Breadcrumb'
+import EmptyState from '@/components/EmptyState'
+import { CategoryIcon } from '@/components/Icon'
 
 const CATEGORY_META = {
   generators:  { label: 'Generators' },
@@ -33,34 +33,21 @@ export default function CategoryPage() {
   return (
     <div>
       {/* Breadcrumb */}
-      <div style={{ marginBottom: 'var(--space-5)' }}>
+      <div className="mb-5">
         <Breadcrumb to="/" label="All tools" />
       </div>
 
       {/* Category header */}
-      <div style={{ marginBottom: 'var(--space-6)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-2)' }}>
-          <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            width: 44, height: 44,
-            background: 'var(--color-primary-light)',
-            color: 'var(--color-primary)',
-            borderRadius: 'var(--radius-md)',
-          }}>
+      <div className="mb-6">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center justify-center w-11 h-11 bg-[var(--color-primary-light)] text-[var(--color-primary)] rounded-[var(--radius-md)]">
             <CategoryIcon category={category} size={22} />
           </div>
-          <h1 style={{
-            fontFamily: 'var(--font-sans)',
-            fontSize: 24,
-            fontWeight: 700,
-            color: 'var(--color-text-primary)',
-            letterSpacing: '-0.02em',
-            margin: 0,
-          }}>
+          <h1 className="font-sans text-2xl font-bold text-[var(--color-text-primary)] tracking-tight m-0">
             {meta.label}
           </h1>
         </div>
-        <p style={{ fontFamily: 'var(--font-sans)', fontSize: 14, color: 'var(--color-text-muted)', margin: 0 }}>
+        <p className="font-sans text-sm text-[var(--color-text-muted)] m-0">
           {categoryTools.length} tool{categoryTools.length !== 1 ? 's' : ''} available
         </p>
       </div>

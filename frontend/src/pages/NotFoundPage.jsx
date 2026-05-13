@@ -1,49 +1,24 @@
 import { Link } from 'react-router-dom'
 import { WrenchIcon } from 'lucide-react'
+import { ToolButton } from '@/components/ui-kit'
 
 export default function NotFoundPage() {
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      textAlign: 'center',
-      padding: 'var(--space-16) var(--space-6)',
-      gap: 'var(--space-4)',
-    }}>
-      <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        width: 72, height: 72,
-        background: 'var(--color-surface-raised)',
-        borderRadius: 24,
-        color: 'var(--color-text-muted)',
-      }}>
+    <div className="flex flex-col items-center justify-center text-center py-16 px-6 gap-4">
+      <div className="flex items-center justify-center w-[72px] h-[72px] bg-[var(--color-surface-raised)] rounded-[24px] text-[var(--color-text-muted)]">
         <WrenchIcon size={36} />
       </div>
-      <h1 style={{
-        fontFamily: 'var(--font-sans)',
-        fontSize: 24,
-        fontWeight: 700,
-        color: 'var(--color-text-primary)',
-        letterSpacing: '-0.02em',
-        margin: 0,
-      }}>
+      <h1 className="font-sans text-2xl font-bold text-[var(--color-text-primary)] tracking-tight m-0">
         Page not found
       </h1>
-      <p style={{
-        fontFamily: 'var(--font-sans)',
-        fontSize: 15,
-        color: 'var(--color-text-muted)',
-        margin: 0,
-        maxWidth: 340,
-        lineHeight: 1.6,
-      }}>
+      <p className="font-sans text-[15px] text-[var(--color-text-muted)] m-0 max-w-[340px] leading-relaxed">
         This tool or page doesn't exist. Head back to the homepage.
       </p>
-      <Link to="/" className="btn-primary" style={{ marginTop: 4 }}>
-        Back to ToolBox
-      </Link>
+      <div className="mt-1">
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <ToolButton>Back to OmniKit</ToolButton>
+        </Link>
+      </div>
     </div>
   )
 }
