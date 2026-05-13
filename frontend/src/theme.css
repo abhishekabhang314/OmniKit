@@ -1,5 +1,5 @@
 /* ============================================================
-   ToolBox — Design Tokens (Single Source of Truth)
+   OmniKit — Design Tokens (Single Source of Truth)
    Import this file in main.jsx BEFORE index.css
    ============================================================ */
 
@@ -32,6 +32,12 @@
   --color-warning:         #F79009;
   --color-warning-light:   #FFFAEB;
 
+  /* ── Gradients ───────────────────────────────────────────── */
+  --gradient-bg:
+    radial-gradient(ellipse at 60% 0%, #EEF2FF 0%, transparent 55%),
+    radial-gradient(ellipse at 0% 80%, #F0FDF4 0%, transparent 45%);
+  --gradient-card-hover: linear-gradient(135deg, #F8F9FB 0%, #EEF2FF 100%);
+
   /* ── Spacing ─────────────────────────────────────────────── */
   --space-1:  4px;
   --space-2:  8px;
@@ -47,7 +53,7 @@
   /* ── Border Radius ───────────────────────────────────────── */
   --radius-sm:   6px;
   --radius-md:   10px;
-  --radius-lg:   14px;
+  --radius-lg:   16px;
   --radius-xl:   20px;
   --radius-full: 9999px;
 
@@ -56,18 +62,40 @@
   --shadow-sm:   0 1px 3px rgba(16, 24, 40, 0.10), 0 1px 2px rgba(16, 24, 40, 0.06);
   --shadow-md:   0 4px 8px -2px rgba(16, 24, 40, 0.10), 0 2px 4px -2px rgba(16, 24, 40, 0.06);
   --shadow-lg:   0 12px 24px -4px rgba(16, 24, 40, 0.08), 0 4px 8px -2px rgba(16, 24, 40, 0.03);
-  --shadow-card: 0 1px 3px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04);
-  --shadow-card-hover: 0 8px 20px -4px rgba(79, 70, 229, 0.15), 0 2px 8px -2px rgba(79, 70, 229, 0.08);
+  --shadow-card: 0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-card-hover: 0 8px 24px rgba(79, 70, 229, 0.10), 0 2px 8px rgba(16, 24, 40, 0.06);
   --shadow-focus: 0 0 0 3px rgba(79, 70, 229, 0.15);
 
   /* ── Transitions ─────────────────────────────────────────── */
   --transition-fast:   150ms ease;
-  --transition-base:   200ms ease;
+  --transition-base:   250ms ease;
   --transition-slow:   300ms ease;
   --transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* ── Header ──────────────────────────────────────────────── */
+  /* ── Layout ──────────────────────────────────────────────── */
   --header-height: 60px;
+
+  /* ── shadcn variable mappings ────────────────────────────── */
+  --background:        var(--color-bg);
+  --foreground:        var(--color-text-primary);
+  --card:              var(--color-surface);
+  --card-foreground:   var(--color-text-primary);
+  --popover:           var(--color-surface);
+  --popover-foreground:var(--color-text-primary);
+  --primary:           var(--color-primary);
+  --primary-foreground:#ffffff;
+  --secondary:         var(--color-surface-raised);
+  --secondary-foreground: var(--color-text-secondary);
+  --muted:             var(--color-primary-light);
+  --muted-foreground:  var(--color-text-muted);
+  --accent:            var(--color-surface-raised);
+  --accent-foreground: var(--color-text-primary);
+  --destructive:       var(--color-error);
+  --destructive-foreground: #ffffff;
+  --border:            var(--color-border);
+  --input:             var(--color-border);
+  --ring:              var(--color-primary);
+  --radius:            var(--radius-md);
 }
 
 /* ── Dark Mode ────────────────────────────────────────────── */
@@ -95,11 +123,16 @@
   --color-warning:         #FEC84B;
   --color-warning-light:   #1C1300;
 
+  --gradient-bg:
+    radial-gradient(ellipse at 60% 0%, #1E1B4B 0%, transparent 55%),
+    radial-gradient(ellipse at 0% 80%, #052e16 0%, transparent 45%);
+  --gradient-card-hover: linear-gradient(135deg, #1A1D27 0%, #1E1B4B 100%);
+
   --shadow-xs:   0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-sm:   0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md:   0 4px 8px -2px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
   --shadow-lg:   0 12px 24px -4px rgba(0, 0, 0, 0.5), 0 4px 8px -2px rgba(0, 0, 0, 0.3);
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-card-hover: 0 8px 20px -4px rgba(99, 102, 241, 0.25), 0 2px 8px -2px rgba(99, 102, 241, 0.15);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 8px 24px rgba(99, 102, 241, 0.15);
   --shadow-focus: 0 0 0 3px rgba(99, 102, 241, 0.25);
 }

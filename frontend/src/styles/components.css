@@ -374,3 +374,41 @@
   .tool-page-wrap { max-width: 100%; }
   .hero-section { padding: var(--space-8) var(--space-4) var(--space-6); }
 }
+
+/* ── Radix Tabs trigger ────────────────────────────────────── */
+.tab-trigger {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 14px;
+  background: var(--color-surface); color: var(--color-text-muted);
+  border: 1.5px solid var(--color-border); border-radius: var(--radius-full);
+  font-family: var(--font-sans); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all var(--transition-base);
+  text-decoration: none;
+  outline: none;
+}
+.tab-trigger:hover { border-color: var(--color-primary); color: var(--color-primary); background: var(--color-primary-light); }
+.tab-trigger[data-state="active"] { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+
+/* ── Radix Accordion animations ───────────────────────────── */
+@keyframes accordion-down {
+  from { height: 0; opacity: 0; }
+  to   { height: var(--radix-accordion-content-height); opacity: 1; }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); opacity: 1; }
+  to   { height: 0; opacity: 0; }
+}
+.data-\[state\=open\]\:animate-accordion-down[data-state="open"] {
+  animation: accordion-down 0.25s ease;
+}
+.data-\[state\=closed\]\:animate-accordion-up[data-state="closed"] {
+  animation: accordion-up 0.2s ease;
+}
+
+/* ── shadcn overrides ─────────────────────────────────────── */
+/* Ensure shadcn Input picks up our tokens */
+.input-field,
+[class*="ui/input"] input {
+  background: var(--color-surface);
+}
+
