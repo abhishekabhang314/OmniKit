@@ -11,6 +11,11 @@ const TOOL_COMPONENTS = {
   'qr-code-generator': lazy(() => import('@/tools/QRCodeGenerator')),
   'unit-converter':    lazy(() => import('@/tools/UnitConverter')),
   'emi-calculator':    lazy(() => import('@/tools/EMICalculator')),
+  'password-generator': lazy(() => import('@/tools/PasswordGenerator')),
+  'uuid-generator':    lazy(() => import('@/tools/UUIDGenerator')),
+  'color-converter':   lazy(() => import('@/tools/ColorConverter')),
+  'bmi-calculator':    lazy(() => import('@/tools/BMICalculator')),
+  'age-calculator':    lazy(() => import('@/tools/AgeCalculator')),
 }
 
 function LoadingFallback() {

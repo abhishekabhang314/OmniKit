@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from tools.color_converter import ColorRequest, ColorResponse, convert_color
 from tools.unit_converter import (
     UnitConvertRequest,
     UnitConvertResponse,
@@ -18,3 +19,8 @@ async def unit_convert(request: UnitConvertRequest):
 async def supported_units():
     """Return all supported unit categories and units."""
     return get_supported_units()
+
+@router.post("/color", response_model=ColorResponse)
+async def color_convert(request: ColorRequest):
+    """Convert colors between HEX, RGB, and HSL."""
+    return convert_color(request)

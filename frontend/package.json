@@ -12,6 +12,7 @@
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-label": "^2.1.8",
+    "@radix-ui/react-popover": "^1.1.15",
     "@radix-ui/react-progress": "^1.1.8",
     "@radix-ui/react-separator": "^1.1.8",
     "@radix-ui/react-slot": "^1.2.4",
@@ -20,9 +21,11 @@
     "axios": "^1.16.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "lucide-react": "^1.14.0",
     "motion": "^12.38.0",
     "react": "^19.2.6",
+    "react-day-picker": "^10.0.0",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.15.0",
     "tailwind-merge": "^3.6.0"
