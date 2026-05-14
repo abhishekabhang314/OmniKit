@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Wrench } from 'lucide-react'
+import NavbarSearch from '@/components/NavbarSearch'
 
 const Github = ({ size = 24, className = '', ...props }) => (
   <svg
@@ -35,8 +36,11 @@ export default function Header() {
             OmniKit
           </Link>
 
+
+
           {/* Right side actions */}
           <div className="header-actions">
+            <NavbarSearch />
             <Tooltip>
               <TooltipTrigger asChild>
                 <a
