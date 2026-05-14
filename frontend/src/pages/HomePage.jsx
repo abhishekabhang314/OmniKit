@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Star, LayoutGrid, Wrench } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { GradientBackground } from '@/components/animate-ui/backgrounds/GradientBackground'
@@ -17,15 +18,18 @@ const CATEGORIES = [
 ]
 
 export default function HomePage() {
-  const [search, setSearch] = useState('')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const search = searchParams.get('q') || ''
   const [isSearching, setIsSearching] = useState(false)
 
   // simulate brief search loading state for demo purposes of Skeleton
   const handleSearch = (v) => {
-    setSearch(v)
     if (v) {
+      setSearchParams({ q: v })
       setIsSearching(true)
       setTimeout(() => setIsSearching(false), 300)
+    } else {
+      setSearchParams({})
     }
   }
 
