@@ -2,6 +2,7 @@
 
 from pydantic import BaseModel, field_validator
 
+
 class BMIRequest(BaseModel):
     weight_kg: float
     height_cm: float

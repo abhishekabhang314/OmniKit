@@ -2,7 +2,9 @@
 
 import secrets
 import string
+
 from pydantic import BaseModel, field_validator
+
 
 class PasswordRequest(BaseModel):
     length: int = 16

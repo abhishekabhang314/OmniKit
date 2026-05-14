@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from tools.qr_code import QRRequest, QRResponse, generate_qr
 from tools.password_generator import PasswordRequest, PasswordResponse, generate_password
+from tools.qr_code import QRRequest, QRResponse, generate_qr
 from tools.uuid_generator import UUIDRequest, UUIDResponse, generate_uuid
 
 router = APIRouter()

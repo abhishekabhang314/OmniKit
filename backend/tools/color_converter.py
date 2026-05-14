@@ -1,8 +1,10 @@
 """Color Converter — uses `colorsys` and simple math to convert HEX, RGB, and HSL."""
 
-import re
 import colorsys
-from pydantic import BaseModel, field_validator
+import re
+
+from pydantic import BaseModel
+
 
 class ColorRequest(BaseModel):
     color: str
@@ -29,8 +31,8 @@ def parse_hsl(hsl_str: str):
     if len(matches) >= 3:
         h = int(matches[0]) % 360
         s = min(100, max(0, int(matches[1])))
-        l = min(100, max(0, int(matches[2])))
-        return h, s, l
+        lightness = min(100, max(0, int(matches[2])))
+        return h, s, lightness
     raise ValueError("Invalid HSL")
 
 def convert_color(request: ColorRequest) -> ColorResponse:
@@ -45,8 +47,8 @@ def convert_color(request: ColorRequest) -> ColorResponse:
         elif color_input.startswith('rgb'):
             r, g, b = parse_rgb(color_input)
         elif color_input.startswith('hsl'):
-            h, s, l = parse_hsl(color_input)
-            r_float, g_float, b_float = colorsys.hls_to_rgb(h / 360.0, l / 100.0, s / 100.0)
+            h, s, lightness = parse_hsl(color_input)
+            r_float, g_float, b_float = colorsys.hls_to_rgb(h / 360.0, lightness / 100.0, s / 100.0)
             r, g, b = round(r_float * 255), round(g_float * 255), round(b_float * 255)
         else:
             raise ValueError("Unsupported color format. Use HEX, RGB, or HSL.")
@@ -63,7 +65,7 @@ def convert_color(request: ColorRequest) -> ColorResponse:
     h_float, l_float, s_float = colorsys.rgb_to_hls(r / 255.0, g / 255.0, b / 255.0)
     h = round(h_float * 360)
     s = round(s_float * 100)
-    l = round(l_float * 100)
-    hsl_str = f"hsl({h}, {s}%, {l}%)"
+    lightness = round(l_float * 100)
+    hsl_str = f"hsl({h}, {s}%, {lightness}%)"
     
     return ColorResponse(hex=hex_code, rgb=rgb_str, hsl=hsl_str)

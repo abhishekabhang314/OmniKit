@@ -1,8 +1,10 @@
 """UUID Generator — uses `uuid` to generate random UUID v4 strings."""
 
 import uuid
-from pydantic import BaseModel
 from typing import List
+
+from pydantic import BaseModel
+
 
 class UUIDRequest(BaseModel):
     count: int = 1

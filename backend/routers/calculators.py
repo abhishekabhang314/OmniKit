@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from tools.emi_calculator import EMIRequest, EMIResponse, calculate_emi
-from tools.bmi_calculator import BMIRequest, BMIResponse, calculate_bmi
 from tools.age_calculator import AgeRequest, AgeResponse, calculate_age
+from tools.bmi_calculator import BMIRequest, BMIResponse, calculate_bmi
+from tools.emi_calculator import EMIRequest, EMIResponse, calculate_emi
 
 router = APIRouter()
 

@@ -1,7 +1,9 @@
 """Age Calculator — pure Python datetime math."""
 
 from datetime import date
+
 from pydantic import BaseModel, field_validator
+
 
 class AgeRequest(BaseModel):
     birth_date: str  # YYYY-MM-DD format expected
