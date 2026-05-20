@@ -2,10 +2,11 @@ services:
   - type: web
     name: OmniKit-api
     runtime: python
-    buildCommand: chmod +x build.sh && ./build.sh
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: APP_ENV
         value: production
       - key: ALLOWED_ORIGINS
-        value: https://your-frontend.vercel.app
+        value: https://omni-kit-tools.vercel.app/
+    pythonVersion: "3.11.9"
