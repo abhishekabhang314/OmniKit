@@ -24,6 +24,15 @@
 
 ---
 
+## 🌐 Live
+
+| | URL |
+|---|---|
+| Frontend | https://omni-kit-tools.vercel.app |
+| API | https://omnikit.onrender.com |
+
+---
+
 ## About
 
 **OmniKit** is an open-source, community-driven platform for everyday utility tools. Instead of Googling a different website for every small task, OmniKit brings them all together in one clean, fast, and unified interface.
