@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to ToolBox are documented here.
+All notable changes to OmniKit are documented here.
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 versioning follows [Semantic Versioning](https://semver.org/).

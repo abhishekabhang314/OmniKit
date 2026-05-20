@@ -1,4 +1,4 @@
-# 🧰 ToolBox
+# 🧰 OmniKit
 
 > A community-built collection of everyday utility tools — QR generators, converters, calculators, and more. Free, fast, and open source.
 
@@ -13,10 +13,12 @@
 ## 📖 Table of Contents
 
 - [About](#about)
-- [Project Structure](#project-structure)
+- [Available Tools](#available-tools)
+- [Architecture](#architecture)
 - [Tech Stack](#tech-stack)
-- [Phases](#phases)
 - [Getting Started](#getting-started)
+- [Adding a New Tool](#adding-a-new-tool)
+- [Testing](#testing)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -24,39 +26,59 @@
 
 ## About
 
-**ToolBox** is an open-source, community-driven platform for everyday utility tools. Instead of Googling a different website for every small task, ToolBox brings them all together in one clean, fast interface.
+**OmniKit** is an open-source, community-driven platform for everyday utility tools. Instead of Googling a different website for every small task, OmniKit brings them all together in one clean, fast, and unified interface.
 
-Every tool runs on a **FastAPI Python backend** (all logic lives in Python) with a **Vite + React frontend**. Tools are registered in a central `tools.json` manifest — adding a new tool is just a Python file, a React component, and a JSON entry.
+Every tool runs on a **FastAPI Python backend** (where the core logic lives) combined with a highly responsive **Vite + React frontend**. Tools are registered dynamically in a central `tools.json` manifest.
 
 ---
 
-## Project Structure
+## Available Tools
 
-```
-toolbox/
+OmniKit currently includes the following tools, categorized for ease of use:
+
+### ⚡ Generators
+- **QR Code Generator:** Generate QR codes from any URL or text instantly.
+- **Password Generator:** Generate strong, random passwords with custom rules (length, casing, symbols).
+- **UUID Generator:** Generate completely random UUIDs (v4) for use in databases and APIs.
+
+### 🔄 Converters
+- **Unit Converter:** Convert between length, weight, temperature, and speed units.
+- **Color Converter:** Convert colors interchangeably between HEX, RGB, and HSL formats.
+
+### 🧮 Calculators
+- **EMI Calculator:** Calculate loan EMI, total interest, and generate a full repayment schedule.
+- **BMI Calculator:** Calculate your Body Mass Index and identify your health category.
+- **Age Calculator:** Calculate exact age in years, months, and days from a given birth date.
+
+---
+
+## Architecture
+
+OmniKit follows a strict separation of concerns, ensuring that business logic is cleanly isolated from the user interface:
+
+```text
+OmniKit/
 ├── backend/                  # FastAPI Python backend
 │   ├── main.py               # App entry point
-│   ├── routers/              # One router per tool category
+│   ├── routers/              # One router per tool category (generators, calculators, etc.)
 │   ├── tools/                # Pure Python logic per tool
 │   ├── tests/                # Pytest test suite
 │   └── requirements.txt
 │
 ├── frontend/                 # Vite + React frontend
 │   ├── src/
-│   │   ├── registry/         # tools.json — single source of truth
-│   │   ├── components/       # Shared UI components
-│   │   ├── tools/            # One component per tool
+│   │   ├── registry/         # tools.json — Single source of truth for dynamic routing
+│   │   ├── components/       # Shared UI components (ToolCard, NavbarSearch, etc.)
+│   │   ├── tools/            # One React component per tool
 │   │   └── pages/            # Route-level pages
 │   ├── index.html
 │   ├── vite.config.js
 │   └── package.json
-│
-├── docs/phases/              # Detailed phase-by-phase guides
-├── .github/                  # Actions, templates, CODEOWNERS
-├── CONTRIBUTING.md
-├── CODE_OF_CONDUCT.md
-└── README.md
 ```
+
+1. **Backend Layer:** Tools are encapsulated as pure Python functions in `backend/tools/`. These are exposed via categorized FastAPI routers in `backend/routers/`.
+2. **Frontend Layer:** The React app handles the presentation. It fetches the manifest (`tools.json`) to dynamically construct the navigation and tool grids.
+3. **Communication:** The frontend communicates with the backend via REST API calls to process inputs and return calculated outputs.
 
 ---
 
@@ -72,62 +94,87 @@ toolbox/
 | Testing (BE) | Pytest | Backend unit tests |
 | Testing (FE) | Vitest | Frontend unit tests |
 | CI/CD | GitHub Actions | Automated checks & deploy |
-| Hosting (FE) | Vercel | Frontend deployment |
-| Hosting (BE) | Render | Backend deployment |
 
 ---
 
-## Phases
-
-| Phase | Name | Status |
-|---|---|---|
-| [Phase 1](docs/phases/PHASE_1_SETUP.md) | Project Setup & Repository | ⏳ Working |
-| [Phase 2](docs/phases/PHASE_2_BACKEND.md) | FastAPI Backend Foundation | ⏳ Next |
-| [Phase 3](docs/phases/PHASE_3_FRONTEND.md) | Vite + React Frontend Foundation | ⏳ Upcoming |
-| [Phase 4](docs/phases/PHASE_4_FIRST_TOOLS.md) | First 3 Tools (End-to-End) | ⏳ Upcoming |
-| [Phase 5](docs/phases/PHASE_5_DEPLOYMENT.md) | Deployment & CI/CD | ⏳ Upcoming |
-| [Phase 6](docs/phases/PHASE_6_COMMUNITY.md) | Community & Contributions | ⏳ Upcoming |
-
----
-
-## Getting Started (Windows)
+## Getting Started
 
 ### Prerequisites
-- Python 3.11+
-- Node.js 18+
-- Git
+- **Python 3.11+**
+- **Node.js 18+**
+- **Git**
+
+### Installation
+
+Clone the repository to your local machine:
+```cmd
+git clone https://github.com/abhishekabhang314/OmniKit.git
+cd OmniKit
+```
+
+#### 1. Start the Backend
+The backend utilizes Python and FastAPI. We recommend using a virtual environment.
 
 ```cmd
-git clone https://github.com/abhishekabhang314/toolbox.git
-cd toolbox
-
-:: Backend
 cd backend
 python -m venv venv
-venv\Scripts\activate
+venv\Scripts\activate   # On Mac/Linux use: source venv/bin/activate
 pip install -r requirements.txt
 uvicorn main:app --reload
+```
+*The backend API will be running at `http://localhost:8000`.*
 
-:: Frontend (new terminal)
+#### 2. Start the Frontend
+In a new terminal window, navigate to the frontend directory:
+
+```cmd
 cd frontend
 npm install
 npm run dev
 ```
+*The frontend will be running at `http://localhost:5173`.*
 
-Full setup → [Phase 1 Guide](docs/phases/PHASE_1_SETUP.md)
+> **Tip:** If you are on Windows, you can simply run the `dev.bat` script in the root directory to start both the frontend and backend simultaneously!
+
+---
+
+## Adding a New Tool
+
+OmniKit is built to be highly extensible. To add a new tool, follow these 3 steps:
+
+1. **Backend Logic (`backend/tools/`):** Create a new Python file for your logic and define your Pydantic request/response models. Hook it up to the appropriate router in `backend/routers/`.
+2. **Frontend UI (`frontend/src/tools/`):** Create a React component for the user interface. It should send requests to your new FastAPI endpoint.
+3. **Register the Tool (`frontend/src/registry/tools.json`):** Add an entry to the JSON manifest containing the `id`, `name`, `description`, `category`, and `route`. The application will dynamically handle the rest.
+
+---
+
+## Testing
+
+The backend includes a comprehensive test suite using `pytest`.
+
+```cmd
+cd backend
+venv\Scripts\activate
+pytest
+```
 
 ---
 
 ## Contributing
 
-Read the [Contributing Guide](CONTRIBUTING.md) before opening a PR.
+We welcome contributions of all kinds, especially new tools! 
+
+Please read the [Contributing Guide](CONTRIBUTING.md) before opening a Pull Request.
 
 1. Fork the repo
-2. Add your tool (Python logic + React component + `tools.json` entry)
-3. Open a PR using the template
+2. Create a new branch (`git checkout -b feature/amazing-tool`)
+3. Make your changes (add logic, UI, and registry entry)
+4. Commit your changes (`git commit -m 'Add Amazing Tool'`)
+5. Push to the branch (`git push origin feature/amazing-tool`)
+6. Open a Pull Request using the provided template
 
 ---
 
 ## License
 
-MIT © ToolBox Contributors.
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for more information.

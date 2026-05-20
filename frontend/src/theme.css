@@ -1,0 +1,138 @@
+/* ============================================================
+   OmniKit — Design Tokens (Single Source of Truth)
+   Import this file in main.jsx BEFORE index.css
+   ============================================================ */
+
+:root {
+  /* ── Typography ─────────────────────────────────────────── */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  /* ── Light Mode Colors ──────────────────────────────────── */
+  --color-bg:              #F8F9FB;
+  --color-surface:         #FFFFFF;
+  --color-surface-raised:  #F2F4F7;
+  --color-border:          #E4E7EC;
+  --color-border-focus:    #4F46E5;
+
+  --color-text-primary:    #101828;
+  --color-text-secondary:  #344054;
+  --color-text-muted:      #667085;
+  --color-text-placeholder:#98A2B3;
+
+  --color-primary:         #4F46E5;
+  --color-primary-hover:   #4338CA;
+  --color-primary-light:   #EEF2FF;
+  --color-primary-muted:   #C7D2FE;
+
+  --color-success:         #12B76A;
+  --color-success-light:   #ECFDF3;
+  --color-error:           #F04438;
+  --color-error-light:     #FEF3F2;
+  --color-warning:         #F79009;
+  --color-warning-light:   #FFFAEB;
+
+  /* ── Gradients ───────────────────────────────────────────── */
+  --gradient-bg:
+    radial-gradient(ellipse at 60% 0%, #EEF2FF 0%, transparent 55%),
+    radial-gradient(ellipse at 0% 80%, #F0FDF4 0%, transparent 45%);
+  --gradient-card-hover: linear-gradient(135deg, #F8F9FB 0%, #EEF2FF 100%);
+
+  /* ── Spacing ─────────────────────────────────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ── Border Radius ───────────────────────────────────────── */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ─────────────────────────────────────────────── */
+  --shadow-xs:   0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-sm:   0 1px 3px rgba(16, 24, 40, 0.10), 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md:   0 4px 8px -2px rgba(16, 24, 40, 0.10), 0 2px 4px -2px rgba(16, 24, 40, 0.06);
+  --shadow-lg:   0 12px 24px -4px rgba(16, 24, 40, 0.08), 0 4px 8px -2px rgba(16, 24, 40, 0.03);
+  --shadow-card: 0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-card-hover: 0 8px 24px rgba(79, 70, 229, 0.10), 0 2px 8px rgba(16, 24, 40, 0.06);
+  --shadow-focus: 0 0 0 3px rgba(79, 70, 229, 0.15);
+
+  /* ── Transitions ─────────────────────────────────────────── */
+  --transition-fast:   150ms ease;
+  --transition-base:   250ms ease;
+  --transition-slow:   300ms ease;
+  --transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Layout ──────────────────────────────────────────────── */
+  --header-height: 60px;
+
+  /* ── shadcn variable mappings ────────────────────────────── */
+  --background:        var(--color-bg);
+  --foreground:        var(--color-text-primary);
+  --card:              var(--color-surface);
+  --card-foreground:   var(--color-text-primary);
+  --popover:           var(--color-surface);
+  --popover-foreground:var(--color-text-primary);
+  --primary:           var(--color-primary);
+  --primary-foreground:#ffffff;
+  --secondary:         var(--color-surface-raised);
+  --secondary-foreground: var(--color-text-secondary);
+  --muted:             var(--color-primary-light);
+  --muted-foreground:  var(--color-text-muted);
+  --accent:            var(--color-surface-raised);
+  --accent-foreground: var(--color-text-primary);
+  --destructive:       var(--color-error);
+  --destructive-foreground: #ffffff;
+  --border:            var(--color-border);
+  --input:             var(--color-border);
+  --ring:              var(--color-primary);
+  --radius:            var(--radius-md);
+}
+
+/* ── Dark Mode ────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --color-bg:              #0F1117;
+  --color-surface:         #1A1D27;
+  --color-surface-raised:  #21253A;
+  --color-border:          #2A2D3A;
+  --color-border-focus:    #6366F1;
+
+  --color-text-primary:    #F2F4F7;
+  --color-text-secondary:  #C8CEDB;
+  --color-text-muted:      #8492A6;
+  --color-text-placeholder:#4A5568;
+
+  --color-primary:         #6366F1;
+  --color-primary-hover:   #818CF8;
+  --color-primary-light:   #1E1B4B;
+  --color-primary-muted:   #3730A3;
+
+  --color-success:         #32D583;
+  --color-success-light:   #052E16;
+  --color-error:           #F97066;
+  --color-error-light:     #2D0F0F;
+  --color-warning:         #FEC84B;
+  --color-warning-light:   #1C1300;
+
+  --gradient-bg:
+    radial-gradient(ellipse at 60% 0%, #1E1B4B 0%, transparent 55%),
+    radial-gradient(ellipse at 0% 80%, #052e16 0%, transparent 45%);
+  --gradient-card-hover: linear-gradient(135deg, #1A1D27 0%, #1E1B4B 100%);
+
+  --shadow-xs:   0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm:   0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md:   0 4px 8px -2px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg:   0 12px 24px -4px rgba(0, 0, 0, 0.5), 0 4px 8px -2px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 8px 24px rgba(99, 102, 241, 0.15);
+  --shadow-focus: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}

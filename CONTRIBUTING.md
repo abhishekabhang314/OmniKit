@@ -1,4 +1,4 @@
-# Contributing to ToolBox
+# Contributing to OmniKit
 
 Thank you for your interest in contributing! This guide explains everything you need to know to add a new tool, fix a bug, or improve the docs.
 
@@ -39,9 +39,9 @@ Please read our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you agr
 ### 1. Fork & Clone
 
 ```cmd
-git clone https://github.com/abhishekabhang314/toolbox.git
-cd toolbox
-git remote add upstream https://github.com/ORIGINAL_OWNER/toolbox.git
+git clone https://github.com/abhishekabhang314/OmniKit.git
+cd OmniKit
+git remote add upstream https://github.com/ORIGINAL_OWNER/OmniKit.git
 ```
 
 ### 2. Backend Setup

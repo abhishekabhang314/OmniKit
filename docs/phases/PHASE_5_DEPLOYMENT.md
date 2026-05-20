@@ -22,7 +22,7 @@
 ```yaml
 services:
   - type: web
-    name: toolbox-api
+    name: OmniKit-api
     runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
@@ -37,7 +37,7 @@ services:
 
 1. Go to https://render.com and sign up / log in with GitHub
 2. Click **New** → **Web Service**
-3. Connect your GitHub repo (`toolbox`)
+3. Connect your GitHub repo (`OmniKit`)
 4. Set:
    - **Root Directory:** `backend`
    - **Build Command:** `pip install -r requirements.txt`
@@ -48,26 +48,26 @@ services:
    - `ALLOWED_ORIGINS` = `https://your-vercel-url.vercel.app`
 6. Click **Create Web Service**
 
-Render will give you a URL like: `https://toolbox-api.onrender.com`
+Render will give you a URL like: `https://OmniKit-api.onrender.com`
 
-Test it: `https://toolbox-api.onrender.com/docs`
+Test it: `https://OmniKit-api.onrender.com/docs`
 
 ---
 
 ## Step 2 — Deploy Frontend to Vercel
 
 1. Go to https://vercel.com and sign up / log in with GitHub
-2. Click **Add New Project** → Import your `toolbox` repo
+2. Click **Add New Project** → Import your `OmniKit` repo
 3. Set:
    - **Root Directory:** `frontend`
    - **Framework Preset:** Vite
    - **Build Command:** `npm run build`
    - **Output Directory:** `dist`
 4. Add environment variable:
-   - `VITE_API_BASE_URL` = `https://toolbox-api.onrender.com`
+   - `VITE_API_BASE_URL` = `https://OmniKit-api.onrender.com`
 5. Click **Deploy**
 
-Vercel will give you a URL like: `https://toolbox.vercel.app`
+Vercel will give you a URL like: `https://OmniKit.vercel.app`
 
 ---
 
@@ -76,7 +76,7 @@ Vercel will give you a URL like: `https://toolbox.vercel.app`
 Go back to Render → your service → **Environment** and update:
 
 ```
-ALLOWED_ORIGINS=https://toolbox.vercel.app
+ALLOWED_ORIGINS=https://OmniKit.vercel.app
 ```
 
 Trigger a redeploy.
@@ -125,9 +125,9 @@ In `README.md`, add a section:
 
 | | URL |
 |---|---|
-| Frontend | https://toolbox.vercel.app |
-| API | https://toolbox-api.onrender.com |
-| API Docs | https://toolbox-api.onrender.com/docs |
+| Frontend | https://OmniKit.vercel.app |
+| API | https://OmniKit-api.onrender.com |
+| API Docs | https://OmniKit-api.onrender.com/docs |
 ```
 
 ---
