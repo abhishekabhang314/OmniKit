@@ -1,5 +1,9 @@
 # 🧰 OmniKit
 
+[![Contributors](https://img.shields.io/github/contributors/abhishekabhang314/OmniKit)](https://github.com/abhishekabhang314/OmniKit/graphs/contributors)
+[![Open Issues](https://img.shields.io/github/issues/abhishekabhang314/OmniKit)](https://github.com/abhishekabhang314/OmniKit/issues)
+[![Stars](https://img.shields.io/github/stars/abhishekabhang314/OmniKit)](https://github.com/abhishekabhang314/OmniKit/stargazers)
+
 > A community-built collection of everyday utility tools — QR generators, converters, calculators, and more. Free, fast, and open source.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -21,6 +25,15 @@
 - [Testing](#testing)
 - [Contributing](#contributing)
 - [License](#license)
+
+---
+
+## 🌐 Live
+
+| | URL |
+|---|---|
+| Frontend | https://omni-kit-tools.vercel.app |
+| API | https://omnikit.onrender.com |
 
 ---
 
