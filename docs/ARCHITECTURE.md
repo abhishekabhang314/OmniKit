@@ -8,12 +8,26 @@ This document explains how OmniKit is put together: the frontend, the backend, h
 
 OmniKit is two independent apps that talk over HTTP:
 
-```text
-┌──────────────────────────────┐         HTTPS / JSON         ┌──────────────────────────────┐
-│  Frontend (React SPA)        │  ── POST /api/<cat>/<tool> ─▶ │  Backend (FastAPI)           │
-│  Hosted on Vercel            │  ◀──────── JSON result ─────  │  Hosted on Render            │
-│  UI, routing, animation      │                               │  All tool logic + validation │
-└──────────────────────────────┘                               └──────────────────────────────┘
+```mermaid
+flowchart LR
+    U(["👤 Visitor's browser"])
+
+    subgraph Vercel["Vercel"]
+        FE["Frontend<br/>React SPA<br/>UI · routing · animation"]
+    end
+
+    subgraph Render["Render"]
+        BE["Backend<br/>FastAPI<br/>tool logic · validation"]
+    end
+
+    REG[("tools.json<br/>tool manifest")]
+    GH["GitHub API<br/>stars · contributors"]
+
+    U -- "loads HTML/JS/CSS" --> FE
+    FE -- "POST /api/{category}/{tool}<br/>JSON" --> BE
+    BE -- "JSON result" --> FE
+    REG -. "bundled at build time" .-> FE
+    FE -. "home page stats" .-> GH
 ```
 
 - The **frontend** shows the interface. It never computes a tool's real result itself.
@@ -80,6 +94,24 @@ ToolBox/
 
 Each tool goes through three layers:
 
+```mermaid
+flowchart LR
+    REQ["HTTP request<br/>POST /api/calculators/emi"] --> MAIN
+
+    subgraph App["backend/main.py"]
+        MAIN["FastAPI app"] --> CORS["CORS middleware<br/>ALLOWED_ORIGINS"]
+        CORS --> R1["/api/generators"]
+        CORS --> R2["/api/converters"]
+        CORS --> R3["/api/calculators"]
+    end
+
+    R3 --> ROUTE["routers/calculators.py<br/>emi()"]
+    ROUTE --> MODEL["tools/emi_calculator.py<br/>EMIRequest (Pydantic)"]
+    MODEL -- "valid" --> LOGIC["calculate_emi()"]
+    MODEL -- "invalid" --> E422["422 + detail"]
+    LOGIC --> RESP["EMIResponse → JSON"]
+```
+
 1. **Model.** Pydantic `XRequest` / `XResponse` classes in `tools/<tool>.py`. Field validators reject bad input (for example, a password length outside 4–128 or a birth date in the future). FastAPI turns those failures into **422** responses automatically.
 2. **Logic.** A plain function in the same module (`generate_qr`, `calculate_emi`, …) that takes the request model and returns the response model. It knows nothing about HTTP, so it is easy to test.
 3. **Route.** A thin handler in `routers/<category>.py` that calls the function. `main.py` mounts each router under its prefix.
@@ -132,6 +164,30 @@ You can try every endpoint interactively at `http://localhost:8000/docs` while t
 | **Plain CSS + custom properties** | Design tokens and the dark/light theme |
 | **@vercel/analytics** | Page-view analytics in production |
 
+### Component structure
+
+```mermaid
+flowchart TD
+    MAIN["main.jsx<br/>BrowserRouter · Analytics"] --> APP["App.jsx<br/>ThemeContext · routes"]
+    APP --> LAYOUT["Layout<br/>ShellContext · Lenis · cursor · curtain"]
+
+    LAYOUT --> HEADER["Header"]
+    LAYOUT --> OUTLET{{"Outlet<br/>current route"}}
+    LAYOUT --> FOOTER["Footer"]
+    LAYOUT --> PALETTE["CommandPalette<br/>(when open)"]
+
+    OUTLET --> HOME["HomePage"]
+    OUTLET --> CAT["CategoryPage"]
+    OUTLET --> TOOLP["ToolPage"]
+    OUTLET --> NF["NotFoundPage"]
+
+    TOOLP -- "lazy import" --> TOOL["tools/EMICalculator.jsx …"]
+    TOOL --> FRAME["instrument/ToolFrame<br/>inputs · readout · actions"]
+    TOOL --> LIVE["hooks/useLiveApi"]
+
+    CATALOG[("lib/catalog.js<br/>from tools.json")] -.-> HEADER & FOOTER & PALETTE & HOME & CAT & TOOLP
+```
+
 ### Routing
 
 `App.jsx` defines four routes inside one shared `Layout`:
@@ -155,7 +211,27 @@ Each tool component is loaded lazily, so a visitor only downloads the code for t
 
 - **Header**: section links on the home page, category tabs elsewhere, search and theme buttons.
 - **Command palette**: opened with **Ctrl/⌘ K** or **/**. Searches names, categories, tags and codes.
-- **Curtain transition**: an accent panel wipes across between pages. Internal links use `OkLink`, which plays the curtain and then navigates.
+- **Curtain transition**: an accent panel wipes across between pages. Internal links use `OkLink`, which plays the curtain and then navigates:
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant OkLink
+    participant Shell as Layout (go)
+    participant Curtain
+    participant Router as React Router
+    participant Page as New page
+
+    User->>OkLink: click
+    OkLink->>Shell: go(href, label)
+    Shell->>Curtain: slide up to cover (0.7s)
+    Curtain-->>Shell: covered
+    Shell->>Router: navigate(href)
+    Router->>Page: mount, scroll reset to top
+    Page->>Curtain: setupPage() wipes it away
+    Page->>Page: headline letters rise, UI fades in
+```
+
 - **Smooth scrolling and pointer effects**: started once for the whole visit.
 - **Footer**.
 
@@ -189,23 +265,34 @@ Every tool renders inside `ToolFrame` (`components/instrument`): inputs on the l
 
 ### The request path
 
-```text
-User types in a tool
-        │
-        ▼
-useLiveApi(path, body)          hooks/useLiveApi.js
-  • waits ~250 ms after the last change (debounce)
-  • cancels the previous in-flight request
-        │
-        ▼
-axios instance                  lib/api.js
-  baseURL = VITE_API_BASE_URL (fallback http://localhost:8000)
-        │   POST JSON
-        ▼
-FastAPI → CORS check → router → Pydantic validation → tool function
-        │
-        ▼
-JSON response ──▶ readout panel updates (numbers count up, text scrambles)
+```mermaid
+sequenceDiagram
+    actor User
+    participant Tool as Tool component
+    participant Hook as useLiveApi
+    participant Axios as lib/api.js (axios)
+    participant API as FastAPI
+    participant Fn as Tool function
+
+    User->>Tool: types "8.5" in Interest rate
+    Tool->>Hook: new request body
+    Note over Hook: wait ~250 ms<br/>abort previous request
+    Hook->>Axios: POST /api/calculators/emi
+    Axios->>API: HTTPS JSON (baseURL = VITE_API_BASE_URL)
+    API->>API: CORS check + Pydantic validation
+    alt valid input
+        API->>Fn: calculate_emi(request)
+        Fn-->>API: EMIResponse
+        API-->>Axios: 200 JSON
+        Axios-->>Hook: data
+        Hook-->>Tool: { data }
+        Tool-->>User: numbers count up in the readout
+    else invalid input
+        API-->>Axios: 422 { detail }
+        Axios-->>Hook: error
+        Hook-->>Tool: { error, last good data }
+        Tool-->>User: error line under the readout
+    end
 ```
 
 Details worth knowing:
@@ -259,6 +346,21 @@ cd frontend && npx eslint src && npm run build
 ---
 
 ## 7. Deployment
+
+```mermaid
+flowchart LR
+    DEV["Developer"] -- "git push" --> GH["GitHub repo"]
+
+    GH -- "push / PR to main or dev" --> CI["GitHub Actions CI<br/>pytest · npm build · ruff"]
+    GH -- "any branch" --> VC["Vercel build"]
+    VC -- "main" --> PROD["Production site"]
+    VC -- "other branches" --> PREV["Preview URL"]
+    GH -- "push to main" --> DEP["deploy.yml"]
+    DEP -- "RENDER_DEPLOY_HOOK" --> RD["Render<br/>pip install · uvicorn"]
+
+    PROD -- "API calls" --> RD
+    PREV -- "API calls<br/>(origin must be in ALLOWED_ORIGINS)" --> RD
+```
 
 | Part | Host | How it deploys |
 |---|---|---|
