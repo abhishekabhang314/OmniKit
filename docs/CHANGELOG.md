@@ -7,6 +7,22 @@ versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [Unreleased]
+### Changed
+- Redesigned the frontend in the "Instrument" style: dark/light tokens,
+  Big Shoulders Display, JetBrains Mono and Hanken Grotesk type
+- New home page with a pinned hero and live output rail, horizontal
+  featured track, pinned category chapters, full index and contribute section
+- New category, tool and 404 pages; every tool now uses a live input/readout
+  frame that updates as you type
+- Smooth scrolling (Lenis) and scroll choreography (GSAP ScrollTrigger),
+  curtain page transitions, ⌘K/Ctrl K tool search, pointer-origin theme reveal
+
+### Removed
+- Tailwind CSS, shadcn/ui, animate-ui, the old ui-kit and their dependencies
+
+---
+
 ## [0.1.0] — 2026-05-20
 ### Added
 - Project scaffold (Phase 1)

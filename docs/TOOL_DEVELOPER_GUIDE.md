@@ -3,77 +3,56 @@
 Welcome to the OmniKit utility tools platform! This guide will walk you through how to build and contribute new tools to the website.
 
 ## Overview
-OmniKit is a Vite + React + Tailwind v4 + shadcn/ui based frontend with a FastAPI backend.
+OmniKit is a Vite + React frontend styled with plain CSS design tokens and animated with GSAP + Lenis, on top of a FastAPI backend.
 All new tools should be added as new components in `frontend/src/tools/` and registered in `frontend/src/registry/tools.json`.
 
-We use a standard shared UI kit (`@/components/ui-kit`) and animation library (`@/components/animate-ui`) to ensure all tools have a cohesive, high-quality, and accessible design.
+Every tool uses the shared **instrument kit** (`@/components/instrument`): an input column next to a live "readout" panel. Using it keeps all tools consistent, themed and accessible, and gives you the count-up and scramble animations for free.
 
 ---
 
 ## Quickstart
 
 1. Create a new `.jsx` file in `frontend/src/tools/` (e.g., `MyNewTool.jsx`).
-2. Register your tool in `frontend/src/registry/tools.json`.
+2. Register your tool in `frontend/src/registry/tools.json` (add `short` and `abbr` for the big display labels).
 3. Add a lazy route export in `frontend/src/pages/ToolPage.jsx` `TOOL_COMPONENTS` map.
 4. Add any required backend endpoints in `backend/main.py`.
+
+The home page, category page, search palette and footer pick the tool up from `tools.json` automatically.
 
 ---
 
 ## Tool Component Template
 
-Here is a simple starting point for a new tool:
+Here is a simple starting point for a new tool. `useLiveApi` posts to your endpoint shortly after the inputs stop changing, so the output updates as the user types. There is no "Run" button.
 
 ```jsx
 import { useState } from 'react'
-import axios from 'axios'
-import { ToolInput, ToolButton, ToolResult, FieldGroup } from '@/components/ui-kit'
+import { ActionButton, Field, Scramble, ToolFrame } from '@/components/instrument'
+import { useLiveApi } from '@/hooks/useLiveApi'
+import { copyText } from '@/lib/output'
 
-export default function MyNewTool() {
-  const [inputVal, setInputVal] = useState('')
-  const [result, setResult] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+export default function MyNewTool({ tool }) {
+  const [text, setText] = useState('hello')
 
-  const handleAction = async () => {
-    if (!inputVal) {
-      setError('Please provide an input value.')
-      return
-    }
-    setError('')
-    setLoading(true)
-    try {
-      const res = await axios.post('/api/tools/my-new-tool', { data: inputVal })
-      setResult(res.data.result)
-    } catch (err) {
-      setError('Something went wrong.')
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { data, error, loading } = useLiveApi('/api/tools/my-new-tool', { data: text }, { enabled: !!text.trim() })
+  const result = data?.result || ''
 
-  return (
-    <div className="flex flex-col gap-6">
-      <FieldGroup cols={1}>
-        <ToolInput
-          label="Enter Value"
-          id="tool-input"
-          value={inputVal}
-          onChange={e => setInputVal(e.target.value)}
-          error={error}
-        />
-      </FieldGroup>
-      
-      <ToolButton loading={loading} onClick={handleAction}>
-        Run Tool
-      </ToolButton>
-
-      <ToolResult visible={!!result}>
-        <div className="text-center font-mono text-2xl text-[var(--color-primary)]">
-          {result}
-        </div>
-      </ToolResult>
-    </div>
+  const inputs = (
+    <Field label="Enter value" htmlFor="my-input">
+      <input id="my-input" className="tl-text" value={text} onChange={e => setText(e.target.value)} />
+    </Field>
   )
+
+  const output = (
+    <>
+      <div className="tl-cap">Result</div>
+      <Scramble className="tl-big" text={result} />
+    </>
+  )
+
+  const actions = <ActionButton primary label="Copy" disabled={!result} onClick={() => copyText(result)} />
+
+  return <ToolFrame code={tool.code} inputs={inputs} output={output} actions={actions} error={error} busy={loading} />
 }
 ```
 
@@ -81,43 +60,50 @@ export default function MyNewTool() {
 
 ## Component Reference
 
-Always use components from our `ui-kit` rather than native HTML inputs to maintain styling consistency.
+From `@/components/instrument`:
 
 | Component | Usage |
 | :--- | :--- |
-| **`ToolInput`** | Standard text/number/textarea input. Supports `label`, `prefix`, `suffix`, `error`, `hint`. |
-| **`ToolSelect`** | Dropdown select. Supports `label`, `options={[{value, label}]}`. |
-| **`ToolSlider`** | Range slider. Supports `label`, `min`, `max`, `value`, `onChange`, `showValue`. |
-| **`ToolButton`** | Primary action button. Supports `loading` state (spinner). |
-| **`ToolResult`** | Animated wrapper for the tool's output. Set `visible={true}` to slide/fade it in. |
-| **`FieldGroup`** | Responsive CSS Grid wrapper for inputs. Supports `cols={1|2|3}`. |
+| **`ToolFrame`** | Page frame. Props: `code`, `inputs`, `output`, `actions`, `error`, `busy`, and `after` (content below the frame, e.g. a table). |
+| **`Field`** | Labelled form row. Supports `label`, `aside` (right-hand hint), `htmlFor`. |
+| **`NumberField`** | Text input plus a bound range slider. Supports `prefix`, `suffix`, `hint`, `min`, `max`, `step`. |
+| **`Segmented`** | Joined button group for one choice: `options={[{ value, label, sub? }]}`. |
+| **`Chips`** | Separate pill buttons for one choice (e.g. units). |
+| **`Toggle`** | On/off option with a checkbox square and sample text. |
+| **`CountUp`** | Number that tweens to each new `value` using your `format` function (keep `format` stable, e.g. module-level or `useMemo`). |
+| **`Scramble`** | Text that decodes through random glyphs when it changes. |
+| **`ActionButton`** | Output action. Shows "Copied ✓" / "Done ✓" after `onClick`; return `false` to skip that. |
+
+Helpers: `useLiveApi(path, body, { enabled, delay })` returns `{ data, error, loading, refresh }`, and `@/lib/output` has `copyText`, `copyImage` and `downloadBlob`.
+
+For plain inputs use the `tl-text` (single line) and `tl-area` (textarea) classes.
 
 ---
 
 ## Theming & Dark Mode
 
-OmniKit has a comprehensive CSS variable design token system (`frontend/src/theme.css`). 
+Design tokens live in `frontend/src/index.css` and switch with `data-theme` on `<html>`.
 **DO NOT use hardcoded hex colors.**
 
-- Dark mode is automatically handled if you use the correct CSS variables or Tailwind classes mapping to these variables.
-- Example text color: `text-[var(--color-text-primary)]` or `text-foreground`.
-- Example background: `bg-[var(--color-surface)]` or `bg-card`.
+- Page surfaces: `var(--bg)`, `var(--bg2)`, `var(--panel)`, text `var(--ink)` / `var(--mute)`, borders `var(--line)`.
+- Accent: `var(--accent)`, with `var(--acc-ink)` for text on it and `var(--acc-text)` for accent-coloured text.
+- Inside the output panel: `var(--ro-ink)`, `var(--ro-dim)`, `var(--ro-line)`.
+- Type: `var(--f-display)` (headlines/numbers), `var(--f-mono)` (labels/data), `var(--f-sans)` (body).
 
 ---
 
 ## Do's & Don'ts
 
 **✅ DO:**
-- Use the `ui-kit` and `animate-ui` components.
-- Use `shadcn/ui` components (like `<Card>`, `<Badge>`, `<Progress>`, `<Accordion>`) for complex layouts.
-- Add an animated loading spinner state via `<ToolButton loading={true}>`.
-- Call your backend API using `axios` and handle errors gracefully.
+- Build on `ToolFrame` and the instrument components.
+- Keep the core logic in your FastAPI endpoint and call it with `useLiveApi`.
+- Put tool-specific styles in `frontend/src/styles/tool.css` with a `tl-` prefix.
+- Respect reduced motion. The kit already does, so prefer it over custom animations.
 
 **❌ DON'T:**
-- Use inline styles for layout (`style={{ margin: 10 }}`). Use Tailwind classes (`m-2.5`).
-- Use native `<input>` or `<button>` directly. Always use `ToolInput` and `ToolButton`.
-- Hardcode colors (`#ff0000`). Use `var(--color-error)`.
-- Use `useState` to manage routing. Let the Vite router handle it.
+- Hardcode colors (`#ff0000`). Use `var(--danger)` and the other tokens.
+- Add a separate "Calculate" button when the output can update live.
+- Use `useState` to manage routing. Let the router handle it.
 
 ---
 
