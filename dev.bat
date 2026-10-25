@@ -5,6 +5,10 @@ title OmniKit Dev Server
 ::  OmniKit — Start Dev Servers
 ::  Runs FastAPI backend + Vite frontend
 ::  simultaneously in separate windows
+::  Usage:
+::    1. Open a command prompt
+::    2. Navigate to the OmniKit root directory
+::    3. Run this script: dev.bat
 :: ─────────────────────────────────────────
 
 echo.
