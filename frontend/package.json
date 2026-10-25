@@ -23,6 +23,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.13",
     "lucide-react": "^1.14.0",
     "motion": "^12.38.0",
     "react": "^19.2.6",
