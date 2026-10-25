@@ -1,143 +1,64 @@
-import { useState } from "react";
-import api from "../lib/api";
-import { ToolButton, ToolResult, FieldGroup } from "@/components/ui-kit";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Label } from "@/components/ui/label";
+import { useState } from 'react'
+import { ActionButton, CountUp, Field, ToolFrame } from '@/components/instrument'
+import { useLiveApi } from '@/hooks/useLiveApi'
+import { copyText } from '@/lib/output'
 
-export default function AgeCalculator() {
-  const [date, setDate] = useState(null);
-  const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+const pad = n => String(n).padStart(2, '0')
+const isoToday = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}` }
+const parseDate = s => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null }
+const fmtInt = v => Math.round(v).toLocaleString('en-US')
 
-  const handleAction = async () => {
-    if (!date) {
-      setError("Please select your birth date.");
-      return;
-    }
-    setError("");
-    setLoading(true);
-    setResult(null);
+// Days until the next birthday (0 when it is today).
+function daysToBirthday(dob, today) {
+  let next = new Date(today.getFullYear(), dob.getMonth(), dob.getDate())
+  if (next < today) next = new Date(today.getFullYear() + 1, dob.getMonth(), dob.getDate())
+  return Math.round((next - today) / 864e5)
+}
 
-    // Format to YYYY-MM-DD
-    const birthDateStr = format(date, "yyyy-MM-dd");
+export default function AgeCalculator({ tool }) {
+  const [dob, setDob] = useState('1995-06-14')
+  const today = isoToday()
+  const born = parseDate(dob)
+  const valid = !!born && dob <= today
 
-    try {
-      const res = await api.post("/api/calculators/age", {
-        birth_date: birthDateStr,
-      });
-      setResult(res.data);
-    } catch (err) {
-      let errorMessage = "Invalid date format.";
-      if (err.response?.data?.detail) {
-        if (typeof err.response.data.detail === "string") {
-          errorMessage = err.response.data.detail;
-        } else if (
-          Array.isArray(err.response.data.detail) &&
-          err.response.data.detail.length > 0
-        ) {
-          errorMessage = err.response.data.detail[0].msg;
-        }
-      }
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data, error, loading } = useLiveApi('/api/calculators/age', { birth_date: dob }, { enabled: valid })
+  const r = valid ? data : null
+  const toNext = born ? daysToBirthday(born, parseDate(today)) : 0
 
-  return (
-    <div className="flex flex-col gap-6">
-      <FieldGroup cols={1}>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="birthDate" className="field-label">
-            Birth Date
-          </Label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-full justify-start text-left font-normal py-3 h-auto input-field",
-                  !date && "text-muted-foreground",
-                  error &&
-                    "border-[var(--color-error)] focus-visible:ring-[var(--color-error)]",
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP") : <span>Pick a date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent
-              className="w-full min-w-[340px] p-0 border-[var(--color-border)] shadow-[var(--shadow-card)]"
-              align="start"
-            >
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                captionLayout="dropdown"
-                fromYear={1900}
-                toYear={new Date().getFullYear()}
-                initialFocus
-                className="w-full [--cell-size:2.75rem]"
-              />
-            </PopoverContent>
-          </Popover>
-          {error && (
-            <p
-              style={{
-                fontSize: 12,
-                color: "var(--color-error)",
-                marginTop: 4,
-                fontFamily: "var(--font-sans)",
-              }}
-            >
-              {error}
-            </p>
-          )}
-        </div>
-      </FieldGroup>
+  const rows = r ? [
+    ['Total months', fmtInt(r.years * 12 + r.months)],
+    ['Total weeks', fmtInt(Math.floor(r.total_days / 7))],
+    ['Total days', fmtInt(r.total_days)],
+    ['Born on a', born.toLocaleDateString('en-US', { weekday: 'long' })],
+    ['Next birthday', toNext === 0 ? 'Today' : `in ${toNext} days`],
+    ['Turning', String(r.years + (toNext === 0 ? 0 : 1))],
+  ] : []
 
-      <ToolButton loading={loading} onClick={handleAction}>
-        Calculate Age
-      </ToolButton>
+  const inputs = (
+    <>
+      <Field label="Date of birth" htmlFor="age-dob">
+        <input id="age-dob" className="tl-text" type="date" value={dob} max={today} onChange={e => setDob(e.target.value)} />
+      </Field>
+      <p className="tl-note">Age is worked out as of today, {parseDate(today).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}.</p>
+    </>
+  )
 
-      <ToolResult visible={!!result}>
-        {result && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[
-              { label: "Years", value: result.years },
-              { label: "Months", value: result.months },
-              { label: "Days", value: result.days },
-              {
-                label: "Total Days",
-                value: result.total_days.toLocaleString(),
-              },
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col items-center justify-center p-4 bg-[var(--color-bg-subtle)] rounded-xl border border-[var(--color-border)]"
-              >
-                <div className="text-3xl font-black text-[var(--color-primary)]">
-                  {item.value}
-                </div>
-                <div className="text-xs text-[var(--color-text-secondary)] uppercase tracking-wider font-semibold mt-1">
-                  {item.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </ToolResult>
-    </div>
-  );
+  const output = valid ? (
+    <>
+      <div className="tl-age">
+        <div><CountUp className="tl-big" value={r ? r.years : NaN} format={fmtInt} /><div className="tl-cap">Years</div></div>
+        <div><CountUp className="tl-big" value={r ? r.months : NaN} format={fmtInt} /><div className="tl-cap">Months</div></div>
+        <div><CountUp className="tl-big" value={r ? r.days : NaN} format={fmtInt} /><div className="tl-cap">Days</div></div>
+      </div>
+      <div className="tl-kv">
+        {rows.map(([k, v]) => <div key={k}><span>{k}</span><span>{v}</span></div>)}
+      </div>
+    </>
+  ) : (
+    <div className="tl-cap" style={{ fontSize: 15, textTransform: 'none', letterSpacing: 0 }}>Pick a date of birth on or before today.</div>
+  )
+
+  const actions = <ActionButton primary label="Copy" disabled={!r} onClick={() => copyText(`${r.years} years, ${r.months} months, ${r.days} days`)} />
+
+  return <ToolFrame code={tool.code} inputs={inputs} output={output} actions={actions} error={valid ? error : null} busy={loading} />
 }

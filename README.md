@@ -81,7 +81,7 @@ OmniKit/
 ├── frontend/                 # Vite + React frontend
 │   ├── src/
 │   │   ├── registry/         # tools.json — Single source of truth for dynamic routing
-│   │   ├── components/       # Shared UI components (ToolCard, NavbarSearch, etc.)
+│   │   ├── components/       # Shell (Header, CommandPalette, Footer) + instrument kit
 │   │   ├── tools/            # One React component per tool
 │   │   └── pages/            # Route-level pages
 │   ├── index.html
@@ -99,9 +99,10 @@ OmniKit/
 
 | Layer | Technology | Purpose |
 |---|---|---|
-| Frontend | Vite + React 18 | UI framework |
-| Styling | Tailwind CSS | Utility-first styling |
-| Routing | React Router v6 | Client-side routing |
+| Frontend | Vite + React 19 | UI framework |
+| Styling | CSS design tokens | Dark/light "Instrument" theme |
+| Motion | GSAP + Lenis | Scroll choreography & smooth scrolling |
+| Routing | React Router v7 | Client-side routing |
 | Backend | FastAPI | Python API framework |
 | Validation | Pydantic v2 | Request/response schemas |
 | Testing (BE) | Pytest | Backend unit tests |

@@ -125,6 +125,8 @@ Add an entry to `frontend/src/registry/tools.json`:
 {
   "id": "your-tool-name",
   "name": "Your Tool Name",
+  "short": "Your Tool",
+  "abbr": "YT",
   "description": "One sentence describing what it does.",
   "category": "generators",
   "icon": "⚡",
@@ -164,7 +166,7 @@ pytest tests/ -v
 
 ### Step 5 — React Component (`frontend/src/tools/`)
 
-Create `frontend/src/tools/YourToolName.jsx`. See Phase 3 guide for the component template.
+Create `frontend/src/tools/YourToolName.jsx`. See the [Tool Developer Guide](docs/TOOL_DEVELOPER_GUIDE.md) for the component template.
 
 ---
 

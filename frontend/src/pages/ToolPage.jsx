@@ -1,88 +1,94 @@
+import { lazy, Suspense, useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom'
-import { lazy, Suspense } from 'react'
-import { Hammer } from 'lucide-react'
-import { Card } from '@/components/ui/card'
-import tools from '@/registry/tools.json'
-import Breadcrumb from '@/components/Breadcrumb'
-import EmptyState from '@/components/EmptyState'
-import { ToolIcon } from '@/components/Icon'
+import OkLink from '@/components/OkLink'
+import NotFoundPage from '@/pages/NotFoundPage'
+import { usePageMotion } from '@/hooks/usePageMotion'
+import { findCategory, findTool, tools, CONTRIBUTING_URL } from '@/lib/catalog'
+import '@/styles/tool.css'
 
 const TOOL_COMPONENTS = {
   'qr-code-generator': lazy(() => import('@/tools/QRCodeGenerator')),
-  'unit-converter':    lazy(() => import('@/tools/UnitConverter')),
-  'emi-calculator':    lazy(() => import('@/tools/EMICalculator')),
+  'unit-converter': lazy(() => import('@/tools/UnitConverter')),
+  'emi-calculator': lazy(() => import('@/tools/EMICalculator')),
   'password-generator': lazy(() => import('@/tools/PasswordGenerator')),
-  'uuid-generator':    lazy(() => import('@/tools/UUIDGenerator')),
-  'color-converter':   lazy(() => import('@/tools/ColorConverter')),
-  'bmi-calculator':    lazy(() => import('@/tools/BMICalculator')),
-  'age-calculator':    lazy(() => import('@/tools/AgeCalculator')),
-}
-
-function LoadingFallback() {
-  return (
-    <div className="flex items-center justify-center p-12 text-[var(--color-text-muted)] font-sans text-sm gap-2">
-      <span className="spinner" />
-      Loading tool...
-    </div>
-  )
+  'uuid-generator': lazy(() => import('@/tools/UUIDGenerator')),
+  'color-converter': lazy(() => import('@/tools/ColorConverter')),
+  'bmi-calculator': lazy(() => import('@/tools/BMICalculator')),
+  'age-calculator': lazy(() => import('@/tools/AgeCalculator')),
 }
 
 export default function ToolPage() {
   const { category, toolId } = useParams()
-  const tool = tools.find(t => t.id === toolId)
-  const ToolComponent = TOOL_COMPONENTS[toolId]
+  const tool = findTool(toolId)
+  if (!tool || tool.category !== category) return <NotFoundPage />
+  return <Tool tool={tool} />
+}
 
-  if (!tool) {
-    return (
-      <div>
-        <div className="mb-5">
-          <Breadcrumb to="/" label="All tools" />
-        </div>
-        <EmptyState
-          title="Tool not found"
-          description="Check the URL or head back to browse all tools."
-          action={{ href: '/', label: 'Back to OmniKit' }}
-        />
-      </div>
-    )
-  }
+function Tool({ tool }) {
+  const root = useRef(null)
+  const cat = findCategory(tool.category)
+  const ToolComponent = TOOL_COMPONENTS[tool.id]
+  const related = tools.filter(t => t.category === tool.category && t.id !== tool.id)
+
+  usePageMotion(root, { fast: true })
+  useEffect(() => { document.title = `${tool.name} — OmniKit` }, [tool.name])
 
   return (
-    <div className="max-w-[720px] mx-auto">
-      {/* Breadcrumb */}
-      <div className="mb-5">
-        <Breadcrumb to={`/${category}`} label={category} />
-      </div>
+    <main ref={root} className="tl-page">
+      <nav className="tl-crumbs ok-label" aria-label="Breadcrumb">
+        <OkLink to="/" label="OmniKit — Index">OmniKit</OkLink><span>/</span>
+        <OkLink to={cat.href} label={cat.navLabel}>{cat.name}</OkLink><span>/</span>
+        <span aria-current="page">{tool.name}</span>
+      </nav>
 
-      {/* Tool header */}
-      <div className="tool-header">
-        <div className="tool-header-icon-row">
-          <div className="tool-header-icon">
-            <ToolIcon id={tool.id} size={22} />
+      <div className="tl-head">
+        <h1 data-split="intro">{tool.name}</h1>
+        <div className="tl-head__side" data-intro="">
+          <div className="tl-tags">
+            <OkLink to={cat.href} label={cat.navLabel} className="is-cat">{cat.name}</OkLink>
+            <span>{tool.code}</span>
+            {tool.isNew && <span className="is-new">New</span>}
           </div>
-          <h1 className="tool-header-name">{tool.name}</h1>
+          <p>{tool.desc}</p>
+          <div className="ok-meta">{tool.route} · {tool.tagLine}</div>
         </div>
-        <p className="tool-header-desc">{tool.description}</p>
       </div>
 
-      {/* Tool UI */}
       {ToolComponent ? (
-        <Card className="p-6 md:p-8 border-[var(--color-border)] shadow-[var(--shadow-card)] bg-[var(--color-surface)]">
-          <Suspense fallback={<LoadingFallback />}>
-            <ToolComponent />
-          </Suspense>
-        </Card>
+        <Suspense fallback={<div className="tl-soon ok-label">Loading tool…</div>}>
+          <ToolComponent tool={tool} />
+        </Suspense>
       ) : (
-        <EmptyState
-          icon={Hammer}
-          title="Coming soon"
-          description="This tool is being built. Want to contribute and ship it?"
-          action={{
-            href: 'https://github.com/abhishekabhang314/OmniKit/blob/main/CONTRIBUTING.md',
-            label: 'Want to build it? Contribute →',
-          }}
-        />
+        <div className="tl-soon">
+          <span className="ok-label">Coming soon</span>
+          <p>This tool is registered but not built yet. Want to ship it?</p>
+          <OkLink to={CONTRIBUTING_URL} className="ok-btn ok-btn--accent">Contribute →</OkLink>
+        </div>
       )}
-    </div>
+
+      {related.length > 0 && (
+        <section className="tl-related">
+          <div className="tl-related__head">
+            <div>
+              <div className="ok-label">More in {cat.name}</div>
+              <h2 data-split="scroll">Related tools</h2>
+            </div>
+            <OkLink to={cat.href} label={cat.navLabel} className="ok-btn ok-btn--quiet" data-magnetic="">All {cat.name} →</OkLink>
+          </div>
+          <div className="tl-related__grid">
+            {related.map(t => (
+              <OkLink key={t.id} to={t.href} label={t.navLabel} className="tl-rel ok-spot" data-batch="" data-tilt="" data-cursor-label="Open tool">
+                <span className="tl-rel__top"><span>{t.code}</span><span>{t.catName}</span></span>
+                <span className="tl-rel__abbr ok-outline" data-depth="1" aria-hidden="true">{t.abbr}</span>
+                <span>
+                  <span className="tl-rel__name">{t.name}</span>
+                  <span className="tl-rel__desc">{t.desc}</span>
+                </span>
+              </OkLink>
+            ))}
+          </div>
+        </section>
+      )}
+    </main>
   )
 }

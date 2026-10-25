@@ -1,215 +1,104 @@
-import { useState } from "react";
-import api from "../lib/api";
-import { ArrowLeftRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  ToolInput,
-  ToolSelect,
-  ToolButton,
-  ToolResult,
-  FieldGroup,
-} from "@/components/ui-kit";
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-} from "@/components/animate-ui/radix/Tabs";
-import { CopyButton } from "@/components/animate-ui/buttons/CopyButton";
+import { useState } from 'react'
+import { ActionButton, Chips, CountUp, Field, Segmented, ToolFrame } from '@/components/instrument'
+import { useLiveApi } from '@/hooks/useLiveApi'
+import { copyText } from '@/lib/output'
 
-const CATEGORIES = {
+// [pint unit sent to the API, chip label, full name]
+const QUANTITIES = {
   length: {
-    units: [
-      "meter",
-      "kilometer",
-      "mile",
-      "yard",
-      "foot",
-      "inch",
-      "centimeter",
-      "millimeter",
-    ],
+    label: 'Length', def: ['kilometer', 'mile'],
+    units: [['meter', 'm', 'Metre'], ['kilometer', 'km', 'Kilometre'], ['centimeter', 'cm', 'Centimetre'], ['millimeter', 'mm', 'Millimetre'], ['mile', 'mi', 'Mile'], ['yard', 'yd', 'Yard'], ['foot', 'ft', 'Foot'], ['inch', 'in', 'Inch']],
   },
-  weight: { units: ["kilogram", "gram", "pound", "ounce", "ton"] },
-  temperature: { units: ["celsius", "fahrenheit", "kelvin"] },
+  weight: {
+    label: 'Weight', def: ['kilogram', 'pound'],
+    units: [['kilogram', 'kg', 'Kilogram'], ['gram', 'g', 'Gram'], ['pound', 'lb', 'Pound'], ['ounce', 'oz', 'Ounce'], ['ton', 'ton', 'Ton']],
+  },
+  temperature: {
+    label: 'Temp', def: ['celsius', 'fahrenheit'],
+    units: [['celsius', '°C', 'Celsius'], ['fahrenheit', '°F', 'Fahrenheit'], ['kelvin', 'K', 'Kelvin']],
+  },
   speed: {
-    units: ["meter_per_second", "kilometer_per_hour", "mile_per_hour", "knot"],
+    label: 'Speed', def: ['kilometer_per_hour', 'mile_per_hour'],
+    units: [['meter_per_second', 'm/s', 'Metre/second'], ['kilometer_per_hour', 'km/h', 'Kilometre/hour'], ['mile_per_hour', 'mph', 'Mile/hour'], ['knot', 'kn', 'Knot']],
   },
   area: {
-    units: [
-      "square_meter",
-      "square_kilometer",
-      "square_mile",
-      "acre",
-      "hectare",
-    ],
+    label: 'Area', def: ['square_meter', 'square_mile'],
+    units: [['square_meter', 'm²', 'Square metre'], ['square_kilometer', 'km²', 'Square kilometre'], ['square_mile', 'mi²', 'Square mile'], ['acre', 'ac', 'Acre'], ['hectare', 'ha', 'Hectare']],
   },
-};
+}
 
-const CATEGORY_LABELS = {
-  length: "Length",
-  weight: "Weight",
-  temperature: "Temperature",
-  speed: "Speed",
-  area: "Area",
-};
+const TYPE_OPTIONS = Object.entries(QUANTITIES).map(([value, q]) => ({ value, label: q.label }))
 
-const UNIT_LABELS = {
-  meter: "Meter",
-  kilometer: "Kilometer",
-  mile: "Mile",
-  yard: "Yard",
-  foot: "Foot",
-  inch: "Inch",
-  centimeter: "Centimeter",
-  millimeter: "Millimeter",
-  kilogram: "Kilogram",
-  gram: "Gram",
-  pound: "Pound",
-  ounce: "Ounce",
-  ton: "Ton",
-  celsius: "Celsius °C",
-  fahrenheit: "Fahrenheit °F",
-  kelvin: "Kelvin K",
-  meter_per_second: "m/s",
-  kilometer_per_hour: "km/h",
-  mile_per_hour: "mph",
-  knot: "Knot",
-  square_meter: "m²",
-  square_kilometer: "km²",
-  square_mile: "mi²",
-  acre: "Acre",
-  hectare: "Hectare",
-};
+const IRREGULAR = { Foot: 'Feet', Inch: 'Inches', Celsius: 'Celsius', Fahrenheit: 'Fahrenheit', Kelvin: 'Kelvin' }
 
-export default function UnitConverter() {
-  const [category, setCategory] = useState("length");
-  const [value, setValue] = useState("");
-  const [fromUnit, setFromUnit] = useState("meter");
-  const [toUnit, setToUnit] = useState("kilometer");
-  const [result, setResult] = useState(null);
-  const [formula, setFormula] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+// "Square metre" → "Square metres", "Metre/second" → "Metres/second".
+function plural(name, n) {
+  if (Math.abs(n) === 1) return name
+  const [head, ...rest] = name.split('/')
+  const words = head.split(' ')
+  const last = words.pop()
+  words.push(IRREGULAR[last] || last + 's')
+  return [words.join(' '), ...rest].join('/')
+}
+const fmtNum = v => {
+  const a = Math.abs(v)
+  if (a !== 0 && (a >= 1e12 || a < 1e-6)) return v.toExponential(4)
+  return v.toLocaleString('en-US', { maximumFractionDigits: a >= 1000 ? 2 : a >= 1 ? 4 : 6 })
+}
 
-  const handleCategory = (cat) => {
-    setCategory(cat);
-    setFromUnit(CATEGORIES[cat].units[0]);
-    setToUnit(CATEGORIES[cat].units[1]);
-    setResult(null);
-    setFormula("");
-    setError("");
-  };
+export default function UnitConverter({ tool }) {
+  const [type, setType] = useState('length')
+  const [value, setValue] = useState('100')
+  const [from, setFrom] = useState('kilometer')
+  const [to, setTo] = useState('mile')
 
-  const swap = () => {
-    setFromUnit(toUnit);
-    setToUnit(fromUnit);
-    setResult(null);
-  };
+  const Q = QUANTITIES[type]
+  const unit = id => Q.units.find(u => u[0] === id) || [id, id, id]
+  const num = parseFloat(value.replace(/,/g, ''))
+  const valid = isFinite(num)
 
-  const convert = async () => {
-    if (!value && value !== 0) {
-      setError("Please enter a value.");
-      return;
-    }
-    setError("");
-    setLoading(true);
-    try {
-      const res = await api.post("/api/converters/unit", {
-        value: parseFloat(value),
-        from_unit: fromUnit,
-        to_unit: toUnit,
-      });
-      setResult(res.data.result);
-      setFormula(res.data.formula);
-    } catch (err) {
-      setError(
-        err.response?.data?.detail ||
-          "Conversion failed. These units may be incompatible.",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data, error, loading } = useLiveApi('/api/converters/unit', { value: num, from_unit: from, to_unit: to }, { enabled: valid })
+  const result = valid && data && data.from_unit === from && data.to_unit === to ? data.result : NaN
 
-  const options = CATEGORIES[category].units.map((u) => ({
-    value: u,
-    label: UNIT_LABELS[u] || u,
-  }));
+  const pickType = t => {
+    setType(t)
+    setFrom(QUANTITIES[t].def[0])
+    setTo(QUANTITIES[t].def[1])
+  }
+  const swap = () => { setFrom(to); setTo(from) }
+  const chips = Q.units.map(([id, label, title]) => ({ value: id, label, title }))
 
-  return (
-    <div className="flex flex-col gap-6">
-      <Tabs value={category} onValueChange={handleCategory}>
-        <TabsList>
-          {Object.keys(CATEGORIES).map((cat) => (
-            <TabsTrigger key={cat} value={cat}>
-              {CATEGORY_LABELS[cat]}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+  const inputs = (
+    <>
+      <Field label="Quantity">
+        <Segmented label="Quantity" options={TYPE_OPTIONS} value={type} onChange={pickType} wrap />
+      </Field>
+      <Field label="Value" htmlFor="un-val">
+        <input id="un-val" className="tl-text" type="text" inputMode="decimal" value={value} onChange={e => setValue(e.target.value)} style={{ fontSize: 24 }} />
+      </Field>
+      <Field label="From"><Chips label="From" options={chips} value={from} onChange={setFrom} /></Field>
+      <button type="button" className="tl-ghost" onClick={swap} aria-label="Swap units" data-magnetic="">⇅ Swap</button>
+      <Field label="To"><Chips label="To" options={chips} value={to} onChange={setTo} /></Field>
+    </>
+  )
 
-      <ToolInput
-        label="Value"
-        id="uc-value"
-        type="number"
-        placeholder="Enter value..."
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && convert()}
-        error={error}
-      />
-
-      <div className="grid grid-cols-[1fr_auto_1fr] gap-3 items-end">
-        <ToolSelect
-          label="From"
-          id="uc-from"
-          options={options}
-          value={fromUnit}
-          onChange={(e) => setFromUnit(e.target.value)}
-        />
-        <Button
-          variant="outline"
-          size="icon"
-          className="h-[46px] w-[46px] rounded-full text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-raised)] border-[1.5px] border-[var(--color-border)] group mb-[1px]"
-          onClick={swap}
-          title="Swap units"
-        >
-          <ArrowLeftRight
-            size={18}
-            className="transition-transform group-hover:rotate-180"
-          />
-        </Button>
-        <ToolSelect
-          label="To"
-          id="uc-to"
-          options={options}
-          value={toUnit}
-          onChange={(e) => setToUnit(e.target.value)}
-        />
+  const output = (
+    <>
+      <div className="tl-unit__from">{valid ? fmtNum(num) : '—'} {plural(unit(from)[2], num)} =</div>
+      <div className="tl-unit__res">
+        <CountUp className="tl-big" value={result} format={fmtNum} />
+        <span className="tl-unit__name">{plural(unit(to)[2], result)}</span>
       </div>
+      {data?.formula && <div className="tl-unit__formula">{data.formula}</div>}
+    </>
+  )
 
-      <ToolButton loading={loading} onClick={convert}>
-        Convert
-      </ToolButton>
+  const actions = (
+    <>
+      <ActionButton primary label="Copy" disabled={!isFinite(result)} onClick={() => copyText(`${fmtNum(result)} ${unit(to)[1]}`)} />
+      <ActionButton label="Swap ⇄" done="Swapped ✓" onClick={swap} />
+    </>
+  )
 
-      <ToolResult
-        visible={result !== null}
-        className="primary-accent text-center relative pt-8 pb-6"
-      >
-        <div className="absolute top-4 right-4">
-          <CopyButton text={String(result)} />
-        </div>
-        <div className="result-label">Result</div>
-        <div className="result-number">
-          {typeof result === "number"
-            ? result.toLocaleString("en-IN", { maximumFractionDigits: 8 })
-            : result}
-        </div>
-        <div className="text-[13px] text-[var(--color-text-muted)] my-2 font-medium">
-          {UNIT_LABELS[toUnit] || toUnit}
-        </div>
-        {formula && <div className="result-formula mt-2">{formula}</div>}
-      </ToolResult>
-    </div>
-  );
+  return <ToolFrame code={tool.code} inputs={inputs} output={output} actions={actions} error={valid ? error : 'Enter a number to convert.'} busy={loading} />
 }

@@ -2,6 +2,8 @@
   {
     "id": "qr-code-generator",
     "name": "QR Code Generator",
+    "short": "QR Code",
+    "abbr": "QR",
     "description": "Generate a QR code from any URL or text instantly.",
     "category": "generators",
     "icon": "⚡",
@@ -14,6 +16,8 @@
   {
     "id": "password-generator",
     "name": "Password Generator",
+    "short": "Password",
+    "abbr": "PW",
     "description": "Generate strong, random passwords with custom rules.",
     "category": "generators",
     "icon": "🔐",
@@ -26,6 +30,8 @@
   {
     "id": "uuid-generator",
     "name": "UUID Generator",
+    "short": "UUID",
+    "abbr": "ID",
     "description": "Generate UUIDs (v4) for use in databases and APIs.",
     "category": "generators",
     "icon": "🆔",
@@ -38,6 +44,8 @@
   {
     "id": "unit-converter",
     "name": "Unit Converter",
+    "short": "Units",
+    "abbr": "UN",
     "description": "Convert between length, weight, temperature, and speed units.",
     "category": "converters",
     "icon": "🔄",
@@ -50,6 +58,8 @@
   {
     "id": "color-converter",
     "name": "Color Converter",
+    "short": "Color",
+    "abbr": "CO",
     "description": "Convert colors between HEX, RGB, and HSL formats.",
     "category": "converters",
     "icon": "🎨",
@@ -62,6 +72,8 @@
   {
     "id": "emi-calculator",
     "name": "EMI Calculator",
+    "short": "EMI",
+    "abbr": "EMI",
     "description": "Calculate loan EMI, total interest, and repayment schedule.",
     "category": "calculators",
     "icon": "🧮",
@@ -74,6 +86,8 @@
   {
     "id": "bmi-calculator",
     "name": "BMI Calculator",
+    "short": "BMI",
+    "abbr": "BMI",
     "description": "Calculate your Body Mass Index and health category.",
     "category": "calculators",
     "icon": "⚖️",
@@ -86,6 +100,8 @@
   {
     "id": "age-calculator",
     "name": "Age Calculator",
+    "short": "Age",
+    "abbr": "AGE",
     "description": "Calculate exact age in years, months, and days from a birth date.",
     "category": "calculators",
     "icon": "📅",
