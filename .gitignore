@@ -42,3 +42,6 @@ desktop.ini
 
 # Render
 .render/
+
+# Design
+design-export/

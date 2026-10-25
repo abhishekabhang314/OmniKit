@@ -16,6 +16,15 @@ def test_unit_converter_valid():
     assert data["from_unit"] == "kilometer"
     assert data["to_unit"] == "meter"
 
+def test_unit_converter_temperature():
+    response = client.post("/api/converters/unit", json={
+        "value": 100,
+        "from_unit": "celsius",
+        "to_unit": "fahrenheit"
+    })
+    assert response.status_code == 200
+    assert response.json()["result"] == 212.0
+
 def test_unit_converter_supported():
     response = client.get("/api/converters/unit/supported")
     assert response.status_code == 200

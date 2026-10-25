@@ -26,7 +26,9 @@ class UnitConvertResponse(BaseModel):
 
 def convert_unit(request: UnitConvertRequest) -> UnitConvertResponse:
     """Convert a value from one unit to another using pint."""
-    quantity = request.value * ureg(request.from_unit)
+    # Quantity() rather than value * unit: multiplying an offset unit such as
+    # celsius raises OffsetUnitCalculusError.
+    quantity = ureg.Quantity(request.value, request.from_unit)
     converted = quantity.to(request.to_unit)
     result = round(converted.magnitude, 6)
 
