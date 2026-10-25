@@ -57,15 +57,22 @@ export function coverThen(label, done) {
 }
 
 function revealCurtain(tl, fast) {
-  if (!curtain || !covering) return false
+  if (!curtain || !covering) return null
   covering = false
-  tl.fromTo(curtain, { yPercent: 0 }, {
+  const el = curtain
+  return tl.fromTo(el, { yPercent: 0 }, {
     yPercent: -100,
     duration: reduceMotion() ? 0.01 : (fast ? 0.8 : 1.1),
     ease: EASE.inOut,
-    onComplete: () => { curtain.style.display = 'none' },
+    onComplete: () => { el.style.display = 'none' },
   })
-  return true
+}
+
+// Safety net: never leave the curtain down if a page fails to reveal it.
+export function liftCurtain() {
+  if (!curtain || !covering) return
+  covering = false
+  gsap.to(curtain, { yPercent: -100, duration: 0.6, ease: EASE.inOut, onComplete: () => { curtain.style.display = 'none' } })
 }
 
 /* ── Text helpers ──────────────────────────────────────────── */
@@ -139,10 +146,11 @@ export function setupPage(root, opts = {}) {
   const $ = s => root.querySelector(s)
   const $$ = s => [...root.querySelectorAll(s)]
 
+  let wiped = null
   const ctx = gsap.context(() => {
     // Intro: curtain wipe → split headline → supporting UI
     const intro = gsap.timeline({ delay: 0.1 })
-    const wiped = revealCurtain(intro, opts.fast)
+    wiped = revealCurtain(intro, opts.fast)
     $$('[data-split=intro]').forEach((el, i) => {
       const ch = split(el)
       if (!R) intro.from(ch, { yPercent: 115, duration: 1.1, ease: EASE.expoOut, stagger: 0.022 }, i === 0 ? (wiped ? '-=0.45' : 0) : '<0.09')
@@ -244,7 +252,11 @@ export function setupPage(root, opts = {}) {
     window.removeEventListener('load', refresh)
     gsap.ticker.remove(marquee)
     mm.revert()
+    // Reverting an unfinished wipe puts the curtain back down; let the next
+    // setup (e.g. StrictMode's second mount) lift it again.
+    const unfinished = wiped && wiped.progress() < 1
     ctx.revert()
+    if (unfinished) covering = true
   }
 }
 
